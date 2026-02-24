@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartBiz — Record Sale (Admin)</title>
+    <link rel="stylesheet" href="css/notifications.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --sb-bg: var(--card);
+            --sb-border: var(--border);
+            --sb-text: var(--muted);
+            --sb-active-bg: var(--green-l);
+            --sb-active: var(--green-d);
+            --sb-hover: var(--subtle);
+            --sb-w: 240px;
+            --sb-w-col: 64px;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --muted: #64748b;
+            --subtle: #f1f5f9;
+            --green: #10b981;
+            --green-d: #059669;
+            --green-l: #d1fae5;
+            --blue: #3b82f6;
+            --blue-l: #dbeafe;
+            --red: #ef4444;
+            --red-l: #fee2e2;
+            --amber: #f59e0b;
+            --amber-l: #fef3c7;
+            --purple: #8b5cf6;
+            --purple-l: #ede9fe;
+            --r: 12px;
+            --r-sm: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --subtle: #273548;
+            --shadow: 0 1px 3px rgba(0, 0, 0, .5);
+            --shadow-md: 0 4px 24px rgba(0, 0, 0, .7);
+            --green-l: rgba(16, 185, 129, 0.15);
+            --blue-l: rgba(59, 130, 246, 0.15);
+            --red-l: rgba(239, 68, 68, 0.15);
+            --amber-l: rgba(245, 158, 11, 0.15);
+            --purple-l: rgba(139, 92, 246, 0.15);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sb-w);
+            height: 100vh;
+            background: var(--sb-bg);
+            border-right: 1px solid var(--sb-border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 200;
+            transition: width .25s cubic-bezier(.4, 0, .2, 1);
+            /* overflow-y: auto; */
+            overflow-x: hidden;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        [data-theme="dark"] .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar.col {
+            width: var(--sb-w-col);
+        }
+
+        .sb-brand {
+            height: 64px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--sb-border);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--green), #0ea5e9);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .brand-txt {
+            overflow: hidden;
+            white-space: nowrap;
+            transition: opacity .2s;
+        }
+
+        .sidebar.col .brand-txt {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .brand-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -.3px;
+        }
+
+        .brand-name span {
+            color: var(--green);
+        }
+
+        .sb-toggle {
+            position: absolute;
+            top: 20px;
+            right: -13px;
+            width: 26px;
+            height: 26px;
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 11px;
+            transition: background .15s, color .15s, transform .25s;
+            box-shadow: var(--shadow);
+            z-index: 5;
+        }
+
+        .sb-toggle:hover {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
+
+        .sidebar.col .sb-toggle {
+            transform: rotate(180deg);
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 12px 8px;
+            /* overflow-y: auto; */
+            overflow-x: hidden;
+        }
+
+        .nav-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            padding: 12px 12px 6px;
+            white-space: nowrap;
+        }
+
+        .sidebar.col .nav-lbl {
+            opacity: 0;
+        }
+
+        .nav-a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: var(--r-sm);
+            color: var(--sb-text);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: background .15s, color .15s;
+            position: relative;
+            margin-bottom: 1px;
+        }
+
+        .nav-a i {
+            font-size: 17px;
+            flex-shrink: 0;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-a:hover {
+            background: var(--sb-hover);
+            color: var(--text);
+        }
+
+        .nav-a.active {
+            background: var(--sb-active-bg);
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .sb-footer {
+            padding: 12px 8px;
+            border-top: 1px solid var(--sb-border);
+            flex-shrink: 0;
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            transition: background .15s;
+            text-decoration: none;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), #0ea5e9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .u-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .u-role {
+            font-size: 10px;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: var(--sb-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left .25s cubic-bezier(.4, 0, .2, 1);
+            min-width: 0;
+        }
+
+        body.col-mode .main {
+            margin-left: var(--sb-w-col);
+        }
+
+        /* TOPBAR */
+        .topbar {
+            height: 64px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r-sm);
+            background: var(--subtle);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 17px;
+            transition: all .15s;
+            text-decoration: none;
+        }
+
+        .icon-btn:hover {
+            color: var(--text);
+            border-color: var(--green);
+            background: var(--green-l);
+        }
+
+        /* CONTENT */
+        .content {
+            flex: 1;
+            padding: 24px 28px;
+        }
+
+        .page-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-head h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* FORM PANEL */
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .panel-head {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            background: var(--subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .form-control {
+            background: var(--subtle);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            outline: none;
+            transition: all .15s;
+        }
+
+        .form-control:focus {
+            border-color: var(--green);
+            background: var(--card);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        /* New Client Box */
+        .new-client-box {
+            background: var(--green-l);
+            border: 1px solid var(--green);
+            border-radius: var(--r-sm);
+            padding: 16px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown .3s ease;
+        }
+
+        .new-client-box.open {
+            display: block;
+        }
+
+        .new-client-box h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--green-d);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Product Rows */
+        .product-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .product-row {
+            display: grid;
+            grid-template-columns: 1fr 80px 140px 42px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .product-row select {
+            height: 42px;
+            width: 100%;
+            border-radius: var(--r-sm);
+            border: 1.5px solid var(--border);
+            padding: 0 10px;
+            background: var(--subtle);
+            color: var(--text);
+            font-size: 13.5px;
+        }
+
+        .product-row input {
+            height: 42px;
+            border-radius: var(--r-sm);
+            border: 1.5px solid var(--border);
+            padding: 0 10px;
+            background: var(--subtle);
+            color: var(--text);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .rm-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--r-sm);
+            border: 1.5px solid #fee2e2;
+            background: #fff1f2;
+            color: var(--red);
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .rm-btn:hover {
+            background: var(--red);
+            color: #fff;
+            border-color: var(--red);
+        }
+
+        /* Summary */
+        .sale-summary {
+            background: var(--subtle);
+            border-radius: var(--r);
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .sum-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 14px;
+        }
+
+        .sum-row:last-child {
+            border-bottom: none;
+            padding-top: 15px;
+            margin-top: 5px;
+        }
+
+        .sum-total {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: var(--r-sm);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all .15s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--green-d);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: var(--subtle);
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--green-l);
+            color: var(--green-d);
+            border-color: var(--green);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width:768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+                transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+            }
+
+            .sidebar.mob-open {
+                transform: translateX(0);
+            }
+
+            .sidebar .sb-toggle {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0 !important;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: flex !important;
+            }
+
+            .sb-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+                z-index: 900;
+            }
+
+            .sb-backdrop.show {
+                display: block;
+            }
+
+            .page-head {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr !important;
+            }
+
+            .product-row {
+                grid-template-columns: 1fr 60px 100px 42px !important;
+                gap: 5px !important;
+            }
+        }
+
+        .hamburger {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--subtle);
+            border: 1px solid var(--border);
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text);
+            margin-right: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sb-brand">
+            <div class="logo-mark">SB</div>
+            <div class="brand-txt">
+                <div class="brand-name">Smart<span>Biz</span></div>
+                <div class="brand-sub">Management Platform</div>
+            </div>
+            <div class="sb-toggle" onclick="toggleSidebar()"><i class="bi bi-chevron-left"></i></div>
+        </div>
+        <nav class="sb-nav">
+            <div class="nav-lbl">Overview</div>
+            <a class="nav-a" href="admin-dashboard.html" data-tip="Dashboard"><i class="bi bi-grid-1x2-fill"></i><span
+                    class="lbl">Dashboard</span></a>
+
+            <div class="nav-lbl">Management</div>
+            <a class="nav-a" href="products.html" data-tip="Products"><i class="bi bi-box-seam-fill"></i><span
+                    class="lbl">Products</span><span class="nbadge">12</span></a>
+            <a class="nav-a" href="services.html" data-tip="Services"><i
+                    class="bi bi-wrench-adjustable-circle-fill"></i><span class="lbl">Services</span></a>
+            <a class="nav-a" href="users.html" data-tip="Users"><i class="bi bi-people-fill"></i><span
+                    class="lbl">Users</span></a>
+            <a class="nav-a" href="clients.html" data-tip="Clients"><i class="bi bi-person-lines-fill"></i><span
+                    class="lbl">Clients</span></a>
+
+            <div class="nav-lbl">Finance</div>
+            <a class="nav-a active" href="sales.html" data-tip="Sales"><i class="bi bi-cart-fill"></i><span
+                    class="lbl">Sales</span></a>
+            <a class="nav-a" href="expenses.html" data-tip="Expenses"><i class="bi bi-wallet2"></i><span
+                    class="lbl">Expenses</span></a>
+            <a class="nav-a" href="profit-loss.html" data-tip="Profit & Loss"><i class="bi bi-graph-up-arrow"></i><span
+                    class="lbl">Profit & Loss</span></a>
+
+            <div class="nav-lbl">Reports</div>
+            <a class="nav-a" href="reports.html" data-tip="Reports"><i
+                    class="bi bi-file-earmark-bar-graph-fill"></i><span class="lbl">Reports</span></a>
+        </nav>
+        <div class="sb-footer">
+            <div class="user-row">
+                <div class="avatar">SK</div>
+                <div class="user-inf">
+                    <div class="u-name">Shalom K.</div>
+                    <div class="u-role">Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="sb-backdrop" id="sbBackdrop" onclick="toggleMobileMenu()"></div>
+    <div class="main">
+        <div class="topbar">
+            <div style="display:flex; align-items:center;">
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <i class="bi bi-list"></i>
+                </div>
+                <h1>Record New Sale</h1>
+            </div>
+            <div class="top-right">
+                <div class="icon-btn" onclick="toggleTheme()"><i class="bi bi-moon-stars" id="themeIcon"></i></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="page-head">
+                <h2>Enter Sale Details</h2>
+                <a href="sales.html" class="btn btn-ghost"><i class="bi bi-arrow-left"></i> Back to Sales</a>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <span class="panel-title">Transaction Information</span>
+                    <span class="badge b-green">Admin Mode</span>
+                </div>
+                <div class="panel-body" id="saleForm">
+                    <div class="form-row">
+                        <div class="field">
+                            <label>Client Name</label>
+                            <select class="form-control" id="clientSelect" onchange="handleClientChange(this)">
+                                <option value="">Select client...</option>
+                                <option value="Jean Bosco">Jean Bosco</option>
+                                <option value="Amina Uwera">Amina Uwera</option>
+                                <option value="Grace Mutoni">Grace Mutoni</option>
+                                <option value="NEW">New Client (+)</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Payment Method</label>
+                            <select class="form-control">
+                                <option>Cash</option>
+                                <option>Mobile Money (MoMo)</option>
+                                <option>Bank Transfer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field" style="grid-column: span 2;">
+                            <label>Invoice Note (Optional)</label>
+                            <textarea class="form-control" rows="2"
+                                placeholder="Add internal notes or special instructions..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- New Client Box -->
+                    <div class="new-client-box" id="newClientForm">
+                        <h4><i class="bi bi-person-plus-fill"></i> Register New Client</h4>
+                        <div class="form-row">
+                            <div class="field">
+                                <label>Full Name *</label>
+                                <input type="text" class="form-control" id="ncName" placeholder="Client's full name" />
+                            </div>
+                            <div class="field">
+                                <label>Phone Number *</label>
+                                <input type="text" class="form-control" id="ncPhone" placeholder="078..." />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="field">
+                                <label>Email Address <span
+                                        style="font-size:10px; color:var(--muted); font-weight:normal;">(Optional)</span></label>
+                                <input type="email" class="form-control" id="ncEmail"
+                                    placeholder="client@example.com" />
+                            </div>
+                            <div class="field">
+                                <label>Address</label>
+                                <input type="text" class="form-control" id="ncAddress"
+                                    placeholder="Kigali, Nyarugenge" />
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content: flex-end; gap: 8px;">
+                            <button class="btn btn-ghost btn-sm" onclick="cancelNewClient()">Cancel</button>
+                            <button class="btn btn-primary btn-sm" onclick="registerClient()">Add & Select
+                                Client</button>
+                        </div>
+                    </div>
+
+                    <div
+                        style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <label
+                            style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Products
+                            & Services</label>
+                        <button class="btn btn-ghost btn-sm" onclick="addRow()"><i class="bi bi-plus-lg"></i> Add
+                            Item</button>
+                    </div>
+
+                    <div class="product-rows" id="productRows">
+                        <div class="product-row">
+                            <select onchange="calcTotal()">
+                                <option value="">Select item...</option>
+                                <optgroup label="Products">
+                                    <option>Laptop HP 15 — RWF 450,000</option>
+                                    <option>USB Cable — RWF 3,500</option>
+                                    <option>Mouse Wireless — RWF 12,000</option>
+                                    <option>Keyboard — RWF 8,000</option>
+                                </optgroup>
+                                <optgroup label="Services">
+                                    <option>Laptop Repair — RWF 15,000</option>
+                                    <option>Network Setup — RWF 25,000</option>
+                                    <option>IT Consultation — RWF 10,000</option>
+                                </optgroup>
+                            </select>
+                            <input type="number" value="1" min="1" onchange="calcTotal()" />
+                            <input type="text" placeholder="RWF 0" readonly
+                                style="font-weight:700; color:var(--green);" />
+                            <button class="rm-btn" onclick="removeRow(this)"><i class="bi bi-trash3"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-top: 25px;">
+                        <div class="field">
+                            <label>Discount (RWF)</label>
+                            <input type="number" id="discount" class="form-control" value="0" oninput="calcTotal()" />
+                        </div>
+                        <div class="sale-summary">
+                            <div class="sum-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">RWF 0</span>
+                            </div>
+                            <div class="sum-row">
+                                <span>Discount</span>
+                                <span id="discountDisplay" style="color:var(--red)">- RWF 0</span>
+                            </div>
+                            <div class="sum-row">
+                                <span>Total Amount</span>
+                                <span class="sum-total" id="totalAmount">RWF 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 12px;">
+                        <button class="btn btn-ghost" onclick="location.href='sales.html'">Discard Sale</button>
+                        <button class="btn btn-primary" onclick="submitSale()"><i class="bi bi-check2-circle"></i>
+                            Confirm & Save Sale</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const prices = {
+            'Laptop HP 15 — RWF 450,000': 450000,
+            'USB Cable — RWF 3,500': 3500,
+            'Mouse Wireless — RWF 12,000': 12000,
+            'Keyboard — RWF 8,000': 8000,
+            'Laptop Repair — RWF 15,000': 15000,
+            'Network Setup — RWF 25,000': 25000,
+            'IT Consultation — RWF 10,000': 10000
+        };
+
+        function handleClientChange(sel) {
+            const box = document.getElementById('newClientForm');
+            if (sel.value === 'NEW') box.classList.add('open');
+            else box.classList.remove('open');
+        }
+
+        function cancelNewClient() {
+            document.getElementById('newClientForm').classList.remove('open');
+            document.getElementById('clientSelect').value = '';
+        }
+
+        function registerClient() {
+            const name = document.getElementById('ncName').value.trim();
+            const phone = document.getElementById('ncPhone').value.trim();
+            if (!name || !phone) { alert('Name and Phone are required.'); return; }
+            const sel = document.getElementById('clientSelect');
+            const opt = document.createElement('option');
+            opt.value = name; opt.textContent = name;
+            sel.insertBefore(opt, sel.querySelector('option[value="NEW"]'));
+            sel.value = name;
+
+            // Clear fields
+            document.getElementById('ncName').value = "";
+            document.getElementById('ncPhone').value = "";
+            document.getElementById('ncEmail').value = "";
+            document.getElementById('ncAddress').value = "";
+
+            document.getElementById('newClientForm').classList.remove('open');
+            alert(`Client ${name} registered successfully!`);
+        }
+
+        function calcTotal() {
+            let sub = 0;
+            document.querySelectorAll('.product-row').forEach(row => {
+                const sel = row.querySelector('select');
+                const qty = parseInt(row.querySelector('input[type="number"]').value) || 0;
+                const price = prices[sel.options[sel.selectedIndex]?.text] || 0;
+                const line = price * qty;
+                row.querySelector('input[type="text"]').value = line > 0 ? 'RWF ' + line.toLocaleString() : 'RWF 0';
+                sub += line;
+            });
+            const disc = parseInt(document.getElementById('discount').value) || 0;
+            const total = Math.max(0, sub - disc);
+            document.getElementById('subtotal').textContent = 'RWF ' + sub.toLocaleString();
+            document.getElementById('discountDisplay').textContent = '- RWF ' + disc.toLocaleString();
+            document.getElementById('totalAmount').textContent = 'RWF ' + total.toLocaleString();
+        }
+
+        const rowHtml = `
+      <select onchange="calcTotal()">
+        <option value="">Select item...</option>
+        <optgroup label="Products">
+          <option>Laptop HP 15 — RWF 450,000</option>
+          <option>USB Cable — RWF 3,500</option>
+          <option>Mouse Wireless — RWF 12,000</option>
+          <option>Keyboard — RWF 8,000</option>
+        </optgroup>
+        <optgroup label="Services">
+          <option>Laptop Repair — RWF 15,000</option>
+          <option>Network Setup — RWF 25,000</option>
+          <option>IT Consultation — RWF 10,000</option>
+        </optgroup>
+      </select>
+      <input type="number" value="1" min="1" onchange="calcTotal()"/>
+      <input type="text" placeholder="RWF 0" readonly style="font-weight:700; color:var(--green);"/>
+      <button class="rm-btn" onclick="removeRow(this)"><i class="bi bi-trash3"></i></button>`;
+
+        function addRow() {
+            const row = document.createElement('div');
+            row.className = 'product-row';
+            row.innerHTML = rowHtml;
+            document.getElementById('productRows').appendChild(row);
+        }
+
+        function removeRow(btn) {
+            if (document.querySelectorAll('.product-row').length > 1) {
+                btn.closest('.product-row').remove(); calcTotal();
+            }
+        }
+
+        function submitSale() {
+            const client = document.getElementById('clientSelect').value;
+            if (!client || client === 'NEW') { alert('Please select a client.'); return; }
+            alert('✅ Sale recorded successfully by Admin!');
+            window.location.href = 'sales.html';
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme_pref', newTheme);
+            document.getElementById('themeIcon').className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun-fill';
+        }
+
+        function toggleSidebar() {
+            document.body.classList.toggle('col-mode');
+            document.getElementById('sidebar').classList.toggle('col');
+            localStorage.setItem('sb_col', document.getElementById('sidebar').classList.contains('col') ? '1' : '0');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Restore theme
+            const t = localStorage.getItem('theme_pref');
+            if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                const icon = document.getElementById('themeIcon');
+                if (icon) icon.className = 'bi bi-sun-fill';
+            }
+
+            // Restore sidebar
+            if (localStorage.getItem('sb_col') === '1') {
+                document.getElementById('sidebar').classList.add('col');
+                document.body.classList.add('col-mode');
+            }
+        });
+        function toggleMobileMenu() {
+            const sb = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sbBackdrop');
+            sb.classList.toggle('mob-open');
+            backdrop.classList.toggle('show');
+        }
+    </script>
+</body>
+
+</html>

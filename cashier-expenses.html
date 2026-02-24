@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartBiz — Expenses</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --sb-bg: var(--card);
+      --sb-border: var(--border);
+      --sb-text: var(--muted);
+      --sb-active-bg: var(--green-l);
+      --sb-hover: var(--subtle);
+      --sb-w: 240px;
+      --sb-w-col: 64px;
+      --bg: #f8fafc;
+      --card: #fff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --subtle: #f1f5f9;
+      --green: #10b981;
+      --green-d: #059669;
+      --green-l: #d1fae5;
+      --blue: #3b82f6;
+      --blue-l: #dbeafe;
+      --red: #ef4444;
+      --red-l: #fee2e2;
+      --amber: #f59e0b;
+      --amber-l: #fef3c7;
+      --purple: #8b5cf6;
+      --purple-l: #ede9fe;
+      --r: 12px;
+      --r-sm: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .07), 0 1px 2px rgba(0, 0, 0, .05);
+      --shadow-md: 0 4px 24px rgba(0, 0, 0, .09);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --subtle: #273548;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .5);
+      --shadow-md: 0 4px 24px rgba(0, 0, 0, .7);
+      --green-l: rgba(16, 185, 129, 0.15);
+      --blue-l: rgba(59, 130, 246, 0.15);
+      --red-l: rgba(239, 68, 68, 0.15);
+      --amber-l: rgba(245, 158, 11, 0.15);
+      --purple-l: rgba(139, 92, 246, 0.15);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* sidebar (same pattern) */
+    .sidebar {
+      width: var(--sb-w);
+      height: 100vh;
+      background: var(--sb-bg);
+      border-right: 1px solid var(--sb-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      transition: width .25s cubic-bezier(.4, 0, .2, 1);
+      /* overflow-y: auto; */
+      overflow-x: hidden;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    [data-theme="dark"] .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar.col {
+      width: var(--sb-w-col);
+    }
+
+    .sb-brand {
+      height: 64px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--sb-border);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--green), #0ea5e9);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-txt {
+      overflow: hidden;
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+
+    .sidebar.col .brand-txt {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .brand-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -.3px;
+    }
+
+    .brand-name span {
+      color: var(--green);
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: var(--sb-text);
+    }
+
+    .sb-toggle {
+      position: absolute;
+      top: 20px;
+      right: -13px;
+      width: 26px;
+      height: 26px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 11px;
+      transition: background .15s, color .15s, transform .25s;
+      box-shadow: var(--shadow);
+      z-index: 5;
+    }
+
+    .sb-toggle:hover {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .sidebar.col .sb-toggle {
+      transform: rotate(180deg);
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 12px 8px;
+      /* overflow-y: auto; */
+      overflow-x: hidden;
+    }
+
+    .nav-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      padding: 12px 12px 6px;
+      white-space: nowrap;
+      transition: opacity .15s;
+    }
+
+    .sidebar.col .nav-lbl {
+      opacity: 0;
+    }
+
+    .nav-a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
+      color: var(--sb-text);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: background .15s, color .15s;
+      position: relative;
+      margin-bottom: 1px;
+    }
+
+    .nav-a i {
+      font-size: 17px;
+      flex-shrink: 0;
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-a .lbl {
+      transition: opacity .15s;
+      flex: 1;
+    }
+
+    .sidebar.col .nav-a .lbl {
+      opacity: 0;
+    }
+
+    .nav-a .nbadge {
+      background: var(--green);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 100px;
+      transition: opacity .15s;
+    }
+
+    .sidebar.col .nav-a .nbadge {
+      opacity: 0;
+    }
+
+    .nav-a:hover {
+      background: var(--sb-hover);
+      color: var(--text);
+    }
+
+    .nav-a.active {
+      background: var(--sb-active-bg);
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .nav-a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: var(--green);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .sidebar.col .nav-a {
+      justify-content: center;
+    }
+
+    .sidebar.col .nav-a[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: calc(var(--sb-w-col) + 8px);
+      background: #1f2937;
+      color: #f9fafb;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+      box-shadow: var(--shadow-md);
+    }
+
+    .sidebar.col .nav-a[data-tip]:hover::after {
+      opacity: 1;
+    }
+
+    .sb-footer {
+      padding: 12px 8px;
+      border-top: 1px solid var(--sb-border);
+      flex-shrink: 0;
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background .15s;
+      text-decoration: none;
+    }
+
+    .user-row:hover {
+      background: var(--sb-hover);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-inf {
+      flex: 1;
+      min-width: 0;
+      transition: opacity .15s;
+    }
+
+    .sidebar.col .user-inf {
+      opacity: 0;
+    }
+
+    .u-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .u-role {
+      font-size: 10px;
+      color: var(--green);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .u-out {
+      color: #4b5563;
+      font-size: 15px;
+      transition: color .15s, opacity .15s;
+    }
+
+    .user-row:hover .u-out {
+      color: var(--red);
+    }
+
+    .sidebar.col .u-out {
+      opacity: 0;
+    }
+
+    .main {
+      margin-left: var(--sb-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left .25s cubic-bezier(.4, 0, .2, 1);
+      min-width: 0;
+    }
+
+    body.col-mode .main {
+      margin-left: var(--sb-w-col);
+    }
+
+    .topbar {
+      height: 64px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    .topbar p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--r-sm);
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 17px;
+      transition: all .15s;
+    }
+
+    .icon-btn:hover {
+      color: var(--text);
+      border-color: var(--green);
+      background: var(--green-l);
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px 28px;
+    }
+
+    /* btns */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: var(--r-sm);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, .25);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-d);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: var(--subtle);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-l);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-edit {
+      background: var(--blue-l);
+      color: var(--blue);
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn-edit:hover {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-del {
+      background: var(--red-l);
+      color: var(--red);
+      border: 1px solid #fecaca;
+    }
+
+    .btn-del:hover {
+      background: var(--red);
+      color: #fff;
+    }
+
+    /* page head */
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .page-head h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    .page-head p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* layout grid */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* ── ADD EXPENSE FORM CARD ── */
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: sticky;
+      top: 84px;
+      animation: fadeUp .4s ease both;
+    }
+
+    .form-card-head {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(239, 68, 68, .05), rgba(245, 158, 11, .03));
+    }
+
+    .form-card-head h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .form-card-head p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .form-body {
+      padding: 20px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, .1);
+    }
+
+    .amount-wrap {
+      position: relative;
+    }
+
+    .amount-prefix {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .amount-wrap input {
+      padding-left: 52px;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .cat-opt input {
+      display: none;
+    }
+
+    .cat-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--muted);
+      transition: all .15s;
+      font-weight: 500;
+    }
+
+    .cat-label i {
+      font-size: 14px;
+    }
+
+    .cat-opt input:checked+.cat-label {
+      border-color: var(--red);
+      background: var(--red-l);
+      color: var(--red);
+    }
+
+    .btn-add-exp {
+      width: 100%;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-sm);
+      padding: 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background .15s, transform .15s;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, .25);
+    }
+
+    .btn-add-exp:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, .3);
+    }
+
+    /* right column */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* stat strip */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .ss {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .4s ease both;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .ss:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .ss::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .ss-r::after {
+      background: linear-gradient(90deg, var(--red), transparent);
+    }
+
+    .ss-a::after {
+      background: linear-gradient(90deg, var(--amber), transparent);
+    }
+
+    .ss-g::after {
+      background: linear-gradient(90deg, var(--green), transparent);
+    }
+
+    .ss-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .ss-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .si-r {
+      background: var(--red-l);
+      color: var(--red);
+    }
+
+    .si-a {
+      background: var(--amber-l);
+      color: var(--amber);
+    }
+
+    .si-g {
+      background: var(--green-l);
+      color: var(--green);
+    }
+
+    .trend {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .t-up {
+      background: var(--green-l);
+      color: var(--green-d);
+    }
+
+    .t-dn {
+      background: var(--red-l);
+      color: var(--red);
+    }
+
+    .ss-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.4px;
+      margin-bottom: 3px;
+    }
+
+    .ss-lbl {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* filter */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .srch-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .srch-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .srch {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 9px 14px 9px 38px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .srch:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, .08);
+    }
+
+    .fsel {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 9px 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .fsel:focus {
+      border-color: var(--red);
+    }
+
+    /* table */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeUp .4s .15s ease both;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .tbl-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 10px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: left;
+      background: var(--subtle);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .1s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--subtle);
+    }
+
+    td {
+      padding: 12px 16px;
+      font-size: 13.5px;
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .b-r {
+      background: var(--red-l);
+      color: var(--red);
+    }
+
+    .b-a {
+      background: var(--amber-l);
+      color: #b45309;
+    }
+
+    .b-g {
+      background: var(--green-l);
+      color: var(--green-d);
+    }
+
+    .b-b {
+      background: var(--blue-l);
+      color: #1d4ed8;
+    }
+
+    .b-p {
+      background: var(--purple-l);
+      color: #6d28d9;
+    }
+
+    .td-acts {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* category breakdown */
+    .cat-breakdown {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeUp .4s .2s ease both;
+    }
+
+    .cat-breakdown .panel-head {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cat-item:last-child {
+      border-bottom: none;
+    }
+
+    .cat-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .cat-bar-wrap {
+      flex: 1;
+    }
+
+    .cat-bar-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .cat-bar-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .cat-bar-amt {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .bar-track {
+      height: 5px;
+      background: var(--subtle);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 1s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    /* modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(2px);
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: var(--r);
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-md);
+      animation: modalIn .22s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(.96) translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-head h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: none;
+      background: var(--subtle);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all .15s;
+    }
+
+    .close-btn:hover {
+      background: var(--red-l);
+      color: var(--red);
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .mrow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 14px 22px;
+      border-top: 1px solid var(--border);
+      background: var(--subtle);
+    }
+
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 600;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .confirm-overlay.open {
+      display: flex;
+    }
+
+    .confirm-box {
+      background: var(--card);
+      border-radius: var(--r);
+      max-width: 360px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+      padding: 28px;
+      text-align: center;
+      animation: modalIn .2s ease;
+    }
+
+    .confirm-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--red-l);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--red);
+      margin: 0 auto 14px;
+    }
+
+    .confirm-box h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .confirm-box p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .confirm-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media(max-width:1100px) {
+      .exp-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: 1000;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+        transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+      }
+
+      .sidebar.mob-open {
+        transform: translateX(0);
+      }
+
+      .sidebar .sb-toggle {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0 !important;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .hamburger {
+        display: flex !important;
+      }
+
+      .sb-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 900;
+      }
+
+      .sb-backdrop.show {
+        display: block;
+      }
+
+      .stat-strip {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 12px !important;
+      }
+
+      .srch-wrap {
+        width: 100% !important;
+      }
+
+      .page-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text);
+      margin-right: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="logo-mark">SB</div>
+      <div class="brand-txt">
+        <div class="brand-name">Smart<span>Biz</span></div>
+        <div class="brand-sub">Cashier Portal</div>
+      </div>
+      <div class="sb-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-chevron-left"></i>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="role-banner">
+        <i class="bi bi-person-badge-fill"></i>
+        <span>Cashier Access</span>
+      </div>
+
+      <div class="nav-lbl">My Workspace</div>
+      <a class="nav-a" href="cashier-dashboard.html" data-tip="Dashboard">
+        <i class="bi bi-grid-1x2-fill"></i><span class="lbl">Dashboard</span>
+      </a>
+      <a class="nav-a" href="cashier-dashboard.html" data-tip="Record Sale">
+        <i class="bi bi-cart-plus-fill"></i><span class="lbl">Record Sale</span>
+      </a>
+      <a class="nav-a" href="cashier-sales.html" data-tip="My Sales">
+        <i class="bi bi-receipt"></i><span class="lbl">My Sales</span>
+      </a>
+
+      <div class="nav-lbl">View Only</div>
+      <a class="nav-a" href="cashier-products.html" data-tip="Products">
+        <i class="bi bi-box-seam"></i><span class="lbl">View Products</span>
+      </a>
+      <a class="nav-a active" href="cashier-expenses.html" data-tip="Expenses">
+        <i class="bi bi-wallet2"></i><span class="lbl">Record Expense</span>
+      </a>
+    </nav>
+
+    <div class="sb-footer">
+      <a href="login.html" class="user-row">
+        <div class="avatar">AM</div>
+        <div class="user-inf">
+          <div class="u-name">Alice Mukamana</div>
+          <div class="u-role">Cashier</div>
+        </div>
+        <i class="bi bi-box-arrow-right u-logout"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="sb-backdrop" id="sbBackdrop" onclick="toggleMobileMenu()"></div>
+  <div class="main" id="mainWrap">
+    <div class="topbar">
+      <div style="display:flex; align-items:center;">
+        <div class="hamburger" onclick="toggleMobileMenu()">
+          <i class="bi bi-list"></i>
+        </div>
+        <div>
+          <h1>Expenses</h1>
+          <p>Track and manage all business expenses</p>
+        </div>
+      </div>
+      <div class="top-right">
+        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+        <a href="cashier-settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
+        <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
+            id="themeIcon"></i></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <h2>Expense Tracker</h2>
+          <p>Record and categorize your business costs</p>
+        </div>
+        <button class="btn btn-ghost"><i class="bi bi-download"></i> Export CSV</button>
+      </div>
+
+      <div class="exp-grid">
+
+        <!-- ── LEFT: Add Form ── -->
+        <div class="form-card">
+          <div class="form-card-head">
+            <h3><i class="bi bi-plus-circle-fill" style="color:var(--red);margin-right:6px;"></i>Record Expense</h3>
+            <p>Add a new business expense entry</p>
+          </div>
+          <div class="form-body">
+            <div class="field">
+              <label>Expense Name *</label>
+              <input type="text" id="expName" placeholder="e.g. Electricity Bill" />
+            </div>
+            <div class="field">
+              <label>Amount (RWF) *</label>
+              <div class="amount-wrap">
+                <span class="amount-prefix">RWF</span>
+                <input type="number" id="expAmount" placeholder="0" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Category</label>
+              <div class="cat-grid">
+                <label class="cat-opt"><input type="radio" name="cat" value="Utilities" checked /><span
+                    class="cat-label"><i class="bi bi-lightning-fill"></i>Utilities</span></label>
+                <label class="cat-opt"><input type="radio" name="cat" value="Rent" /><span class="cat-label"><i
+                      class="bi bi-building"></i>Rent</span></label>
+                <label class="cat-opt"><input type="radio" name="cat" value="Supplies" /><span class="cat-label"><i
+                      class="bi bi-box-seam"></i>Supplies</span></label>
+                <label class="cat-opt"><input type="radio" name="cat" value="Salary" /><span class="cat-label"><i
+                      class="bi bi-people-fill"></i>Salary</span></label>
+                <label class="cat-opt"><input type="radio" name="cat" value="Transport" /><span class="cat-label"><i
+                      class="bi bi-truck"></i>Transport</span></label>
+                <label class="cat-opt"><input type="radio" name="cat" value="Other" /><span class="cat-label"><i
+                      class="bi bi-three-dots"></i>Other</span></label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Date</label>
+              <input type="date" id="expDate" value="2026-02-23" />
+            </div>
+            <div class="field">
+              <label>Note (optional)</label>
+              <textarea id="expNote" rows="2" placeholder="Additional details..."></textarea>
+            </div>
+            <button class="btn-add-exp" onclick="addExpense()">
+              <i class="bi bi-plus-circle-fill"></i> Add Expense
+            </button>
+          </div>
+        </div>
+
+        <!-- ── RIGHT: Stats + Table ── -->
+        <div class="right-col">
+
+          <!-- Stats -->
+          <div class="stat-strip">
+            <div class="ss ss-r" style="animation-delay:.05s">
+              <div class="ss-top">
+                <div class="ss-icon si-r"><i class="bi bi-wallet2"></i></div><span class="trend t-dn"><i
+                    class="bi bi-arrow-up"></i>8%</span>
+              </div>
+              <div class="ss-val">RWF 380,000</div>
+              <div class="ss-lbl">Total — Feb 2026</div>
+            </div>
+            <div class="ss ss-a" style="animation-delay:.1s">
+              <div class="ss-top">
+                <div class="ss-icon si-a"><i class="bi bi-receipt-cutoff"></i></div><span class="trend t-dn">14
+                  entries</span>
+              </div>
+              <div class="ss-val">14</div>
+              <div class="ss-lbl">Expense Records</div>
+            </div>
+            <div class="ss ss-g" style="animation-delay:.15s">
+              <div class="ss-top">
+                <div class="ss-icon si-g"><i class="bi bi-calculator"></i></div><span>—</span>
+              </div>
+              <div class="ss-val">RWF 27,143</div>
+              <div class="ss-lbl">Average per Entry</div>
+            </div>
+          </div>
+
+          <!-- Category breakdown -->
+          <div class="cat-breakdown">
+            <div class="panel-head">
+              <span class="panel-title">Expense by Category</span>
+              <span style="font-size:12px;color:var(--muted);">Feb 2026</span>
+            </div>
+            <div id="catBreakdown"></div>
+          </div>
+
+          <!-- Filter + Table -->
+          <div>
+            <div class="filter-bar" style="margin-bottom:14px;">
+              <div class="srch-wrap"><i class="bi bi-search"></i><input class="srch" type="text"
+                  placeholder="Search expenses..." oninput="filterExp()" /></div>
+              <select class="fsel" id="catFilter" onchange="filterExp()">
+                <option value="">All Categories</option>
+                <option>Utilities</option>
+                <option>Rent</option>
+                <option>Supplies</option>
+                <option>Salary</option>
+                <option>Transport</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <span class="panel-title">All Expenses</span>
+                <span style="font-size:12px;color:var(--muted);" id="expCount">14 records</span>
+              </div>
+              <div class="tbl-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Expense</th>
+                      <th>Category</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                      <th>Recorded By</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="expBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="overlay" id="editModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Edit Expense</h3>
+        <button class="close-btn" onclick="closeEdit()"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="field"><label>Expense Name</label><input type="text" id="eName" /></div>
+        <div class="mrow">
+          <div class="field"><label>Amount (RWF)</label><input type="number" id="eAmount" /></div>
+          <div class="field"><label>Date</label><input type="date" id="eDate" /></div>
+        </div>
+        <div class="field"><label>Category</label>
+          <select id="eCat">
+            <option>Utilities</option>
+            <option>Rent</option>
+            <option>Supplies</option>
+            <option>Salary</option>
+            <option>Transport</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Note</label><textarea id="eNote" rows="2"></textarea></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeEdit()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEdit()"><i class="bi bi-check-lg"></i> Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirm -->
+  <div class="confirm-overlay" id="confirmDel">
+    <div class="confirm-box">
+      <div class="confirm-icon"><i class="bi bi-trash3-fill"></i></div>
+      <h3>Delete Expense?</h3>
+      <p>This will permanently remove <strong id="delExpName"></strong> from your records.</p>
+      <div class="confirm-btns">
+        <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+        <button class="btn btn-del" onclick="doDelete()"><i class="bi bi-trash3"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme_pref', newTheme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun-fill';
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const t = localStorage.getItem('theme_pref');
+      if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'bi bi-sun-fill';
+      }
+    });
+    let expenses = [
+      { id: 1, name: 'Electricity Bill', cat: 'Utilities', amount: 18000, date: '2026-02-20', note: 'Monthly MTN bill', by: 'Shalom K.' },
+      { id: 2, name: 'Shop Rent', cat: 'Rent', amount: 120000, date: '2026-02-01', note: 'February rent payment', by: 'Shalom K.' },
+      { id: 3, name: 'Printer Paper (5 reams)', cat: 'Supplies', amount: 7500, date: '2026-02-15', note: 'Office stationery', by: 'Alice M.' },
+      { id: 4, name: 'Internet (VATEL)', cat: 'Utilities', amount: 25000, date: '2026-02-01', note: 'Monthly fibre plan', by: 'Shalom K.' },
+      { id: 5, name: 'Staff Salary', cat: 'Salary', amount: 80000, date: '2026-02-28', note: 'Alice February salary', by: 'Shalom K.' },
+      { id: 6, name: 'Water Bill', cat: 'Utilities', amount: 4500, date: '2026-02-18', note: 'WASAC monthly bill', by: 'Shalom K.' },
+      { id: 7, name: 'Delivery Fuel', cat: 'Transport', amount: 15000, date: '2026-02-10', note: 'Supplier pickup Kigali', by: 'Alice M.' },
+      { id: 8, name: 'Cleaning Supplies', cat: 'Supplies', amount: 6000, date: '2026-02-12', note: 'Soap, mop, gloves', by: 'Alice M.' },
+      { id: 9, name: 'Generator Fuel', cat: 'Utilities', amount: 12000, date: '2026-02-16', note: 'Power backup 20L', by: 'Shalom K.' },
+      { id: 10, name: 'Bank Charges', cat: 'Other', amount: 3500, date: '2026-02-05', note: 'Monthly bank fees', by: 'Shalom K.' },
+      { id: 11, name: 'Office Chair (repair)', cat: 'Supplies', amount: 5000, date: '2026-02-08', note: 'Welding + cushion', by: 'Alice M.' },
+      { id: 12, name: 'Transport to Kigali', cat: 'Transport', amount: 8000, date: '2026-02-14', note: 'Stock purchase trip', by: 'Shalom K.' },
+      { id: 13, name: 'Phone Credit', cat: 'Utilities', amount: 5000, date: '2026-02-19', note: 'Business calls', by: 'Shalom K.' },
+      { id: 14, name: 'Miscellaneous', cat: 'Other', amount: 5500, date: '2026-02-22', note: 'Misc small expenses', by: 'Alice M.' },
+    ];
+
+    const catColors = {
+      Utilities: { bg: 'var(--amber-l)', color: 'var(--amber)', icon: 'bi-lightning-fill' },
+      Rent: { bg: 'var(--purple-l)', color: 'var(--purple)', icon: 'bi-building' },
+      Supplies: { bg: 'var(--blue-l)', color: 'var(--blue)', icon: 'bi-box-seam' },
+      Salary: { bg: 'var(--green-l)', color: 'var(--green)', icon: 'bi-people-fill' },
+      Transport: { bg: 'var(--blue-l)', color: '#0891b2', icon: 'bi-truck' },
+      Other: { bg: '#f3f4f6', color: '#6b7280', icon: 'bi-three-dots' },
+    };
+
+    const fmtRWF = n => 'RWF ' + Number(n).toLocaleString();
+    let editId = null, deleteId = null;
+
+    function catBadge(c) {
+      const s = catColors[c] || catColors.Other;
+      return `<span class="badge" style="background:${s.bg};color:${s.color};"><i class="bi ${s.icon}"></i> ${c}</span>`;
+    }
+
+    function renderExpenses(data) {
+      const tbody = document.getElementById('expBody');
+      if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted);"><i class="bi bi-inbox" style="font-size:28px;display:block;margin-bottom:8px;"></i>No expenses found.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map((e, i) => `
+      <tr>
+        <td style="color:var(--muted);font-size:12px;">${String(i + 1).padStart(2, '0')}</td>
+        <td><div style="font-weight:600;">${e.name}</div>${e.note ? `<div style="font-size:11.5px;color:var(--muted);">${e.note}</div>` : ''}</td>
+        <td>${catBadge(e.cat)}</td>
+        <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--red);">${fmtRWF(e.amount)}</td>
+        <td style="font-size:12.5px;color:var(--muted);">${e.date}</td>
+        <td style="font-size:12.5px;">${e.by}</td>
+        <td><div style="display:flex;gap:6px;">
+          <button class="btn btn-sm btn-edit" onclick="openEdit(${e.id})"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-del" onclick="openConfirm(${e.id})"><i class="bi bi-trash3"></i></button>
+        </div></td>
+      </tr>`).join('');
+      document.getElementById('expCount').textContent = `${data.length} record${data.length !== 1 ? 's' : ''}`;
+    }
+
+    function renderCatBreakdown() {
+      const totals = {};
+      expenses.forEach(e => totals[e.cat] = (totals[e.cat] || 0) + e.amount);
+      const grand = Object.values(totals).reduce((a, b) => a + b, 0);
+      const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+      document.getElementById('catBreakdown').innerHTML = sorted.map(([cat, amt]) => {
+        const s = catColors[cat] || catColors.Other;
+        const pct = grand > 0 ? Math.round(amt / grand * 100) : 0;
+        return `<div class="cat-item">
+        <div class="cat-dot" style="background:${s.bg};color:${s.color};"><i class="bi ${s.icon}"></i></div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-head"><span class="cat-bar-name">${cat}</span><span class="cat-bar-amt">${fmtRWF(amt)} · ${pct}%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${s.color};"></div></div>
+        </div>
+      </div>`;
+      }).join('');
+    }
+
+    function filterExp() {
+      const q = document.querySelector('.srch').value.toLowerCase();
+      const c = document.getElementById('catFilter').value;
+      renderExpenses(expenses.filter(e =>
+        (e.name.toLowerCase().includes(q) || e.note.toLowerCase().includes(q)) &&
+        (!c || e.cat === c)
+      ));
+    }
+
+    function addExpense() {
+      const name = document.getElementById('expName').value.trim();
+      const amount = parseInt(document.getElementById('expAmount').value) || 0;
+      const cat = document.querySelector('input[name="cat"]:checked')?.value || 'Other';
+      const date = document.getElementById('expDate').value;
+      const note = document.getElementById('expNote').value.trim();
+      if (!name || !amount) { alert('Please enter expense name and amount.'); return; }
+      expenses.unshift({ id: Date.now(), name, cat, amount, date, note, by: 'Shalom K.' });
+      document.getElementById('expName').value = '';
+      document.getElementById('expAmount').value = '';
+      document.getElementById('expNote').value = '';
+      filterExp(); renderCatBreakdown();
+    }
+
+    function openEdit(id) {
+      editId = id;
+      const e = expenses.find(x => x.id === id);
+      document.getElementById('eName').value = e.name;
+      document.getElementById('eAmount').value = e.amount;
+      document.getElementById('eDate').value = e.date;
+      document.getElementById('eCat').value = e.cat;
+      document.getElementById('eNote').value = e.note;
+      document.getElementById('editModal').classList.add('open');
+    }
+
+    function closeEdit() { document.getElementById('editModal').classList.remove('open'); editId = null; }
+
+    function saveEdit() {
+      const e = expenses.find(x => x.id === editId);
+      e.name = document.getElementById('eName').value;
+      e.amount = parseInt(document.getElementById('eAmount').value) || 0;
+      e.date = document.getElementById('eDate').value;
+      e.cat = document.getElementById('eCat').value;
+      e.note = document.getElementById('eNote').value;
+      closeEdit(); filterExp(); renderCatBreakdown();
+    }
+
+    function openConfirm(id) {
+      deleteId = id;
+      document.getElementById('delExpName').textContent = expenses.find(x => x.id === id).name;
+      document.getElementById('confirmDel').classList.add('open');
+    }
+    function closeConfirm() { document.getElementById('confirmDel').classList.remove('open'); deleteId = null; }
+    function doDelete() { expenses = expenses.filter(x => x.id !== deleteId); closeConfirm(); filterExp(); renderCatBreakdown(); }
+
+    function toggleMobileMenu() {
+      const sb = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sbBackdrop');
+      sb.classList.toggle('mob-open');
+      backdrop.classList.toggle('show');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Restore theme
+      const t = localStorage.getItem('theme_pref');
+      if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'bi bi-sun-fill';
+      }
+
+      if (localStorage.getItem('sb_col') === '1') {
+        document.getElementById('sidebar').classList.add('col');
+        document.body.classList.add('col-mode');
+      }
+      renderExpenses(expenses);
+      renderCatBreakdown();
+    });
+  </script>
+</body>
+
+</html>

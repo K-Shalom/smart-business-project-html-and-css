@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartBiz — Clients</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --sb-bg: var(--card);
+      --sb-border: var(--border);
+      --sb-text: var(--muted);
+      --sb-active-bg: var(--green-l);
+      --sb-hover: var(--subtle);
+      --sb-w: 240px;
+      --sb-w-col: 64px;
+      --bg: #f8fafc;
+      --card: #fff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --subtle: #f1f5f9;
+      --green: #10b981;
+      --green-d: #059669;
+      --green-l: #d1fae5;
+      --blue: #3b82f6;
+      --blue-l: #dbeafe;
+      --red: #ef4444;
+      --red-l: #fee2e2;
+      --amber: #f59e0b;
+      --amber-l: #fef3c7;
+      --purple: #8b5cf6;
+      --purple-l: #ede9fe;
+      --r: 12px;
+      --r-sm: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .07), 0 1px 2px rgba(0, 0, 0, .05);
+      --shadow-md: 0 4px 24px rgba(0, 0, 0, .09);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --subtle: #273548;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .5);
+      --shadow-md: 0 4px 24px rgba(0, 0, 0, .7);
+      --green-l: rgba(16, 185, 129, 0.15);
+      --blue-l: rgba(59, 130, 246, 0.15);
+      --red-l: rgba(239, 68, 68, 0.15);
+      --amber-l: rgba(245, 158, 11, 0.15);
+      --purple-l: rgba(139, 92, 246, 0.15);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: var(--sb-w);
+      height: 100vh;
+      background: var(--sb-bg);
+      border-right: 1px solid var(--sb-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      transition: width .25s cubic-bezier(.4, 0, .2, 1);
+      /* overflow-y: auto; */
+      overflow-x: hidden;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    [data-theme="dark"] .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar.col {
+      width: var(--sb-w-col);
+    }
+
+    .sb-brand {
+      height: 64px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--sb-border);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--green), #0ea5e9);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-txt {
+      overflow: hidden;
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+
+    .sidebar.col .brand-txt {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .brand-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -.3px;
+    }
+
+    .brand-name span {
+      color: var(--green);
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: var(--sb-text);
+    }
+
+    .sb-toggle {
+      position: absolute;
+      top: 20px;
+      right: -13px;
+      width: 26px;
+      height: 26px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 11px;
+      transition: background .15s, color .15s, transform .25s;
+      box-shadow: var(--shadow);
+      z-index: 5;
+    }
+
+    .sb-toggle:hover {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .sidebar.col .sb-toggle {
+      transform: rotate(180deg);
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 12px 8px;
+      /* overflow-y: auto; */
+      overflow-x: hidden;
+    }
+
+    .nav-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      padding: 12px 12px 6px;
+      white-space: nowrap;
+      transition: opacity .15s;
+    }
+
+    .sidebar.col .nav-lbl {
+      opacity: 0;
+    }
+
+    .nav-a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
+      color: var(--sb-text);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: background .15s, color .15s;
+      position: relative;
+      margin-bottom: 1px;
+    }
+
+    .nav-a i {
+      font-size: 17px;
+      flex-shrink: 0;
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-a .lbl {
+      transition: opacity .15s;
+      flex: 1;
+    }
+
+    .sidebar.col .nav-a .lbl {
+      opacity: 0;
+    }
+
+    .nav-a:hover {
+      background: var(--sb-hover);
+      color: var(--text);
+    }
+
+    .nav-a.active {
+      background: var(--sb-active-bg);
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .nav-a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: var(--green);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .sidebar.col .nav-a {
+      justify-content: center;
+    }
+
+    .sidebar.col .nav-a[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: calc(var(--sb-w-col) + 8px);
+      background: #1f2937;
+      color: #f9fafb;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+      box-shadow: var(--shadow-md);
+    }
+
+    .sidebar.col .nav-a[data-tip]:hover::after {
+      opacity: 1;
+    }
+
+    .sb-footer {
+      padding: 12px 8px;
+      border-top: 1px solid var(--sb-border);
+      flex-shrink: 0;
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background .15s;
+      text-decoration: none;
+    }
+
+    .user-row:hover {
+      background: var(--sb-hover);
+    }
+
+    .av {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-inf {
+      flex: 1;
+      min-width: 0;
+      transition: opacity .15s;
+    }
+
+    .sidebar.col .user-inf {
+      opacity: 0;
+    }
+
+    .u-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .u-role {
+      font-size: 10px;
+      color: var(--green);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .u-out {
+      color: #4b5563;
+      font-size: 15px;
+      transition: color .15s, opacity .15s;
+    }
+
+    .user-row:hover .u-out {
+      color: var(--red);
+    }
+
+    .sidebar.col .u-out {
+      opacity: 0;
+    }
+
+    .main {
+      margin-left: var(--sb-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left .25s cubic-bezier(.4, 0, .2, 1);
+      min-width: 0;
+    }
+
+    body.col-mode .main {
+      margin-left: var(--sb-w-col);
+    }
+
+    .topbar {
+      height: 64px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    .topbar p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--r-sm);
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 17px;
+      transition: all .15s;
+    }
+
+    .icon-btn:hover {
+      color: var(--text);
+      border-color: var(--green);
+      background: var(--green-l);
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: var(--r-sm);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, .25);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-d);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: var(--subtle);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-l);
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .btn-edit {
+      background: var(--blue-l);
+      color: var(--blue);
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn-edit:hover {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-del {
+      background: var(--red-l);
+      color: var(--red);
+      border: 1px solid #fecaca;
+    }
+
+    .btn-del:hover {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .btn-view {
+      background: var(--green-l);
+      color: var(--green-d);
+      border: 1px solid #a7f3d0;
+    }
+
+    .btn-view:hover {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .page-head h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    .page-head p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* stats */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .ss {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .4s ease both;
+      transition: transform .15s;
+    }
+
+    .ss:hover {
+      transform: translateY(-2px);
+    }
+
+    .ss::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .ss-b::after {
+      background: linear-gradient(90deg, var(--blue), transparent);
+    }
+
+    .ss-g::after {
+      background: linear-gradient(90deg, var(--green), transparent);
+    }
+
+    .ss-p::after {
+      background: linear-gradient(90deg, var(--purple), transparent);
+    }
+
+    .ss-a::after {
+      background: linear-gradient(90deg, var(--amber), transparent);
+    }
+
+    .ss-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+
+    .si-b {
+      background: var(--blue-l);
+      color: var(--blue);
+    }
+
+    .si-g {
+      background: var(--green-l);
+      color: var(--green);
+    }
+
+    .si-p {
+      background: var(--purple-l);
+      color: var(--purple);
+    }
+
+    .si-a {
+      background: var(--amber-l);
+      color: var(--amber);
+    }
+
+    .ss-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      margin-bottom: 2px;
+    }
+
+    .ss-lbl {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* filter */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .srch-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .srch-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .srch {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 9px 14px 9px 38px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .srch:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, .1);
+    }
+
+    .fsel {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 9px 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* table */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeUp .4s .15s ease both;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .tbl-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 10px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: left;
+      background: var(--subtle);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .1s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--subtle);
+    }
+
+    td {
+      padding: 12px 16px;
+      font-size: 13.5px;
+      vertical-align: middle;
+    }
+
+    /* client avatar */
+    .cl-av {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    /* modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(2px);
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: var(--r);
+      width: 100%;
+      max-width: 480px;
+      box-shadow: var(--shadow-md);
+      animation: modalIn .22s ease;
+      max-height: 92vh;
+      /* overflow-y: auto; */
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(.96) translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--card);
+      z-index: 2;
+    }
+
+    .modal-head h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: none;
+      background: var(--subtle);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: all .15s;
+    }
+
+    .close-btn:hover {
+      background: var(--red-l);
+      color: var(--red);
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .mf {
+      margin-bottom: 15px;
+    }
+
+    .mf label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .mf input,
+    .mf select,
+    .mf textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical;
+    }
+
+    .mf input:focus,
+    .mf select:focus,
+    .mf textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, .1);
+    }
+
+    .mrow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 14px 22px;
+      border-top: 1px solid var(--border);
+      background: var(--subtle);
+    }
+
+    /* profile modal */
+    .profile-modal {
+      max-width: 540px;
+    }
+
+    .profile-header {
+      padding: 24px 22px;
+      background: linear-gradient(135deg, var(--sb-bg), #1f2937);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .profile-av {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+
+    .profile-sub {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pstat {
+      padding: 16px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .pstat:last-child {
+      border-right: none;
+    }
+
+    .pstat-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .pstat-lbl {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .profile-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 18px 22px;
+    }
+
+    .pd {
+      background: var(--subtle);
+      border-radius: var(--r-sm);
+      padding: 10px 12px;
+    }
+
+    .pd-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .pd-val {
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .recent-sales-head {
+      padding: 0 22px 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* confirm */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 600;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .confirm-overlay.open {
+      display: flex;
+    }
+
+    .cbox {
+      background: var(--card);
+      border-radius: var(--r);
+      max-width: 360px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+      padding: 28px;
+      text-align: center;
+      animation: modalIn .2s ease;
+    }
+
+    .cbox-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--red-l);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--red);
+      margin: 0 auto 14px;
+    }
+
+    .cbox h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .cbox p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .cbox-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media(max-width:1100px) {
+      .stat-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: 1000;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+        transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+      }
+
+      .sidebar.mob-open {
+        transform: translateX(0);
+      }
+
+      .sidebar .sb-toggle {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0 !important;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .hamburger {
+        display: flex !important;
+      }
+
+      .sb-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 900;
+      }
+
+      .sb-backdrop.show {
+        display: block;
+      }
+
+      .stat-strip {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 12px !important;
+      }
+
+      .search-wrap {
+        width: 100% !important;
+      }
+
+      .page-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text);
+      margin-right: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="logo-mark">SB</div>
+      <div class="brand-txt">
+        <div class="brand-name">Smart<span>Biz</span></div>
+        <div class="brand-sub">Management Platform</div>
+      </div>
+      <div class="sb-toggle" onclick="toggleSidebar()"><i class="bi bi-chevron-left"></i></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Overview</div>
+      <a class="nav-a" href="admin-dashboard.html" data-tip="Dashboard"><i class="bi bi-grid-1x2-fill"></i><span
+          class="lbl">Dashboard</span></a>
+      <div class="nav-lbl">Management</div>
+      <a class="nav-a" href="products.html" data-tip="Products"><i class="bi bi-box-seam-fill"></i><span
+          class="lbl">Products</span></a>
+      <a class="nav-a" href="services.html" data-tip="Services"><i class="bi bi-wrench-adjustable-circle-fill"></i><span
+          class="lbl">Services</span></a>
+      <a class="nav-a" href="users.html" data-tip="Users"><i class="bi bi-people-fill"></i><span
+          class="lbl">Users</span></a>
+      <a class="nav-a active" href="clients.html" data-tip="Clients"><i class="bi bi-person-lines-fill"></i><span
+          class="lbl">Clients</span></a>
+      <div class="nav-lbl">Finance</div>
+      <a class="nav-a" href="sales.html" data-tip="Sales"><i class="bi bi-cart-fill"></i><span
+          class="lbl">Sales</span></a>
+      <a class="nav-a" href="expenses.html" data-tip="Expenses"><i class="bi bi-wallet2"></i><span
+          class="lbl">Expenses</span></a>
+      <a class="nav-a" href="profit-loss.html" data-tip="Profit & Loss"><i class="bi bi-graph-up-arrow"></i><span
+          class="lbl">Profit & Loss</span></a>
+      <div class="nav-lbl">Reports</div>
+      <a class="nav-a" href="reports.html" data-tip="Reports"><i class="bi bi-file-earmark-bar-graph-fill"></i><span
+          class="lbl">Reports</span></a>
+    </nav>
+    <div class="sb-footer">
+      <a href="login.html" class="user-row">
+        <div class="av">SK</div>
+        <div class="user-inf">
+          <div class="u-name">Shalom K.</div>
+          <div class="u-role">Admin</div>
+        </div>
+        <i class="bi bi-box-arrow-right u-out"></i>
+      </a>
+    </div>
+  </aside>
+
+  <div class="sb-backdrop" id="sbBackdrop" onclick="toggleMobileMenu()"></div>
+  <div class="main" id="mainWrap">
+    <div class="topbar">
+      <div style="display:flex; align-items:center;">
+        <div class="hamburger" onclick="toggleMobileMenu()">
+          <i class="bi bi-list"></i>
+        </div>
+        <div>
+          <h1>Clients</h1>
+          <p>Manage your customer database</p>
+        </div>
+      </div>
+      <div class="top-right">
+        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+        <a href="settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
+        <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
+            id="themeIcon"></i></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <h2>Client Directory</h2>
+          <p>Track customers and their purchase history</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost"><i class="bi bi-download"></i> Export</button>
+          <button class="btn btn-primary" onclick="openModal()"><i class="bi bi-person-plus-fill"></i> Add
+            Client</button>
+        </div>
+      </div>
+
+      <div class="stat-strip">
+        <div class="ss ss-b" style="animation-delay:.04s">
+          <div class="ss-icon si-b"><i class="bi bi-people-fill"></i></div>
+          <div class="ss-val" id="cTotal">8</div>
+          <div class="ss-lbl">Total Clients</div>
+        </div>
+        <div class="ss ss-g" style="animation-delay:.08s">
+          <div class="ss-icon si-g"><i class="bi bi-cart-check-fill"></i></div>
+          <div class="ss-val" id="cBought">8</div>
+          <div class="ss-lbl">Made a Purchase</div>
+        </div>
+        <div class="ss ss-p" style="animation-delay:.12s">
+          <div class="ss-icon si-p"><i class="bi bi-cash-stack"></i></div>
+          <div class="ss-val" id="cRevenue">RWF 1.2M</div>
+          <div class="ss-lbl">Total Revenue</div>
+        </div>
+        <div class="ss ss-a" style="animation-delay:.16s">
+          <div class="ss-icon si-a"><i class="bi bi-graph-up-arrow"></i></div>
+          <div class="ss-val" id="cAvg">RWF 154K</div>
+          <div class="ss-lbl">Avg. Spend / Client</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="srch-wrap"><i class="bi bi-search"></i><input class="srch" type="text"
+            placeholder="Search clients..." oninput="filterClients()" /></div>
+        <select class="fsel" id="locFilter" onchange="filterClients()">
+          <option value="">All Locations</option>
+          <option>Karongi</option>
+          <option>Kigali</option>
+          <option>Rubavu</option>
+          <option>Musanze</option>
+        </select>
+        <select class="fsel" id="sortFilter" onchange="filterClients()">
+          <option value="name">Sort: Name</option>
+          <option value="spent">Sort: Total Spent</option>
+          <option value="recent">Sort: Recent</option>
+        </select>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">All Clients</span>
+          <span style="font-size:12px;color:var(--muted);" id="clCount">8 clients</span>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Client</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Total Purchases</th>
+                <th>Total Spent</th>
+                <th>Last Purchase</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clientsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="overlay" id="clientModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="mTitle">Add New Client</h3><button class="close-btn" onclick="closeModal()"><i
+            class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="mrow">
+          <div class="mf"><label>First Name *</label><input type="text" id="mFirst" placeholder="Jean" /></div>
+          <div class="mf"><label>Last Name *</label><input type="text" id="mLast" placeholder="Bosco" /></div>
+        </div>
+        <div class="mrow">
+          <div class="mf"><label>Phone *</label><input type="tel" id="mPhone" placeholder="0788001001" /></div>
+          <div class="mf"><label>Email</label><input type="email" id="mEmail" placeholder="jean@email.com" /></div>
+        </div>
+        <div class="mrow">
+          <div class="mf"><label>Location</label><input type="text" id="mLoc" placeholder="e.g. Karongi" /></div>
+          <div class="mf"><label>Type</label><select id="mType">
+              <option>Individual</option>
+              <option>Business</option>
+              <option>NGO</option>
+            </select></div>
+        </div>
+        <div class="mf"><label>Notes</label><textarea id="mNotes" rows="2"
+            placeholder="Any additional notes..."></textarea></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveClient()"><i class="bi bi-check-lg"></i> <span id="mSaveTxt">Add
+            Client</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="overlay" id="profileModal">
+    <div class="modal profile-modal">
+      <div class="modal-head">
+        <h3 id="profTitle">Client Profile</h3><button class="close-btn" onclick="closeProfile()"><i
+            class="bi bi-x-lg"></i></button>
+      </div>
+      <div id="profileContent"></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeProfile()">Close</button>
+        <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> New Sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirm -->
+  <div class="confirm-overlay" id="cdel">
+    <div class="cbox">
+      <div class="cbox-icon"><i class="bi bi-person-dash-fill"></i></div>
+      <h3>Remove Client?</h3>
+      <p><strong id="dName"></strong> will be removed. Their sales history will remain in the system.</p>
+      <div class="cbox-btns">
+        <button class="btn btn-ghost" onclick="document.getElementById('cdel').classList.remove('open')">Cancel</button>
+        <button class="btn btn-del" onclick="doDelete()"><i class="bi bi-trash3"></i> Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme_pref', newTheme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun-fill';
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const t = localStorage.getItem('theme_pref');
+      if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'bi bi-sun-fill';
+      }
+    });
+    const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#0ea5e9', '#ec4899', '#14b8a6'];
+    let clients = [
+      { id: 1, first: 'Jean', last: 'Bosco', phone: '0788001001', email: 'jean.bosco@gmail.com', loc: 'Karongi', type: 'Individual', purchases: 6, spent: 245000, last: '2026-02-23', notes: 'Regular customer, prefers MOMO' },
+      { id: 2, first: 'Amina', last: 'Uwera', phone: '0788002002', email: 'amina.uwera@gmail.com', loc: 'Kigali', type: 'Business', purchases: 4, spent: 320000, last: '2026-02-23', notes: 'Buys in bulk' },
+      { id: 3, first: 'Patrick', last: 'Nkurunziza', phone: '0788003003', email: 'patrick.nk@gmail.com', loc: 'Karongi', type: 'Individual', purchases: 3, spent: 190000, last: '2026-02-22', notes: '' },
+      { id: 4, first: 'Grace', last: 'Mutoni', phone: '0788004004', email: 'grace.mutoni@gmail.com', loc: 'Rubavu', type: 'Individual', purchases: 5, spent: 87000, last: '2026-02-22', notes: '' },
+      { id: 5, first: 'Eric', last: 'Habimana', phone: '0788005005', email: 'eric.hab@gmail.com', loc: 'Musanze', type: 'Business', purchases: 2, spent: 115000, last: '2026-02-21', notes: 'Payment sometimes delayed' },
+      { id: 6, first: 'Diane', last: 'Uwase', phone: '0788006006', email: 'diane.uwase@gmail.com', loc: 'Karongi', type: 'Individual', purchases: 8, spent: 56000, last: '2026-02-21', notes: '' },
+      { id: 7, first: 'Peter', last: 'Mugisha', phone: '0788007007', email: 'peter.mug@gmail.com', loc: 'Kigali', type: 'NGO', purchases: 3, spent: 142000, last: '2026-02-20', notes: 'NGO procurement officer' },
+      { id: 8, first: 'Clara', last: 'Ingabire', phone: '0788008008', email: 'clara.ing@gmail.com', loc: 'Karongi', type: 'Individual', purchases: 11, spent: 73000, last: '2026-02-20', notes: 'Most frequent buyer' },
+    ];
+    let editId = null, deleteId = null;
+    const ini = c => (c.first[0] + (c.last[0] || '')).toUpperCase();
+    const fmtRWF = n => 'RWF ' + Number(n).toLocaleString();
+    const color = i => COLORS[i % COLORS.length];
+
+    function renderClients(d) {
+      const body = document.getElementById('clientsBody');
+      if (!d.length) { body.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:36px;color:var(--muted);"><i class="bi bi-people" style="font-size:30px;display:block;margin-bottom:8px;"></i>No clients found.</td></tr>`; return; }
+      body.innerHTML = d.map((c, i) => `<tr>
+      <td style="color:var(--muted);font-size:12px;">${String(i + 1).padStart(2, '0')}</td>
+      <td><div style="display:flex;align-items:center;gap:10px;">
+        <div class="cl-av" style="background:${color(c.id - 1)};">${ini(c)}</div>
+        <div><div style="font-weight:600;font-size:13.5px;">${c.first} ${c.last}</div>
+        <div style="font-size:11.5px;color:var(--muted);">${c.email || '—'}</div></div>
+      </div></td>
+      <td style="font-size:13px;">${c.phone}</td>
+      <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:12.5px;color:var(--muted);"><i class="bi bi-geo-alt"></i>${c.loc}</span></td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;text-align:center;">${c.purchases}</td>
+      <td style="font-weight:700;color:var(--green);">${fmtRWF(c.spent)}</td>
+      <td style="font-size:12.5px;color:var(--muted);">${c.last}</td>
+      <td><div style="display:flex;gap:5px;">
+        <button class="btn btn-sm btn-view" onclick="viewProfile(${c.id})"><i class="bi bi-eye"></i></button>
+        <button class="btn btn-sm btn-edit" onclick="openEdit(${c.id})"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-del" onclick="openDel(${c.id})"><i class="bi bi-trash3"></i></button>
+      </div></td>
+    </tr>`).join('');
+      document.getElementById('clCount').textContent = `${d.length} client${d.length !== 1 ? 's' : ''}`;
+    }
+
+    function filterClients() {
+      const q = document.querySelector('.srch').value.toLowerCase();
+      const lf = document.getElementById('locFilter').value;
+      const sf = document.getElementById('sortFilter').value;
+      let d = clients.filter(c => `${c.first} ${c.last} ${c.phone} ${c.email}`.toLowerCase().includes(q) && (!lf || c.loc === lf));
+      if (sf === 'spent') d.sort((a, b) => b.spent - a.spent);
+      else if (sf === 'recent') d.sort((a, b) => b.last.localeCompare(a.last));
+      else d.sort((a, b) => a.first.localeCompare(b.first));
+      renderClients(d);
+    }
+
+    function viewProfile(id) {
+      const c = clients.find(x => x.id === id);
+      document.getElementById('profTitle').textContent = `${c.first} ${c.last}`;
+      document.getElementById('profileContent').innerHTML = `
+      <div class="profile-header">
+        <div class="profile-av" style="background:${color(c.id - 1)};">${ini(c)}</div>
+        <div class="profile-info">
+          <div class="profile-name">${c.first} ${c.last}</div>
+          <div class="profile-sub">${c.phone} · ${c.email || 'No email'}</div>
+          <div style="margin-top:6px;font-size:12px;color:#9ca3af;"><i class="bi bi-geo-alt" style="margin-right:4px;"></i>${c.loc} · ${c.type}</div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-val" style="color:var(--blue);">${c.purchases}</div><div class="pstat-lbl">Purchases</div></div>
+        <div class="pstat"><div class="pstat-val" style="color:var(--green);">${fmtRWF(c.spent)}</div><div class="pstat-lbl">Total Spent</div></div>
+        <div class="pstat"><div class="pstat-val" style="color:var(--amber);">${fmtRWF(Math.round(c.spent / c.purchases))}</div><div class="pstat-lbl">Avg. Order</div></div>
+      </div>
+      <div class="profile-detail-grid">
+        <div class="pd"><div class="pd-lbl">Last Purchase</div><div class="pd-val">${c.last}</div></div>
+        <div class="pd"><div class="pd-lbl">Client Type</div><div class="pd-val">${c.type}</div></div>
+        <div class="pd" style="grid-column:1/-1;"><div class="pd-lbl">Notes</div><div class="pd-val" style="font-weight:400;color:var(--muted);">${c.notes || 'No notes recorded.'}</div></div>
+      </div>`;
+      document.getElementById('profileModal').classList.add('open');
+    }
+    function closeProfile() { document.getElementById('profileModal').classList.remove('open'); }
+
+    function openModal() { editId = null; document.getElementById('mTitle').textContent = 'Add New Client'; document.getElementById('mSaveTxt').textContent = 'Add Client';['mFirst', 'mLast', 'mPhone', 'mEmail', 'mLoc', 'mNotes'].forEach(i => document.getElementById(i).value = ''); document.getElementById('mType').value = 'Individual'; document.getElementById('clientModal').classList.add('open'); }
+    function openEdit(id) { editId = id; const c = clients.find(x => x.id === id); document.getElementById('mTitle').textContent = 'Edit Client'; document.getElementById('mSaveTxt').textContent = 'Save Changes'; document.getElementById('mFirst').value = c.first; document.getElementById('mLast').value = c.last; document.getElementById('mPhone').value = c.phone; document.getElementById('mEmail').value = c.email; document.getElementById('mLoc').value = c.loc; document.getElementById('mType').value = c.type; document.getElementById('mNotes').value = c.notes; document.getElementById('clientModal').classList.add('open'); }
+    function closeModal() { document.getElementById('clientModal').classList.remove('open'); editId = null; }
+    function saveClient() {
+      const first = document.getElementById('mFirst').value.trim(), last = document.getElementById('mLast').value.trim(), phone = document.getElementById('mPhone').value.trim();
+      if (!first || !last || !phone) { alert('Fill required fields.'); return; }
+      const data = { first, last, phone, email: document.getElementById('mEmail').value, loc: document.getElementById('mLoc').value, type: document.getElementById('mType').value, notes: document.getElementById('mNotes').value };
+      if (editId) { Object.assign(clients.find(x => x.id === editId), data); }
+      else { clients.push({ id: Date.now(), ...data, purchases: 0, spent: 0, last: '—' }); }
+      closeModal(); filterClients();
+    }
+    function openDel(id) { deleteId = id; const c = clients.find(x => x.id === id); document.getElementById('dName').textContent = `${c.first} ${c.last}`; document.getElementById('cdel').classList.add('open'); }
+    function doDelete() { clients = clients.filter(x => x.id !== deleteId); document.getElementById('cdel').classList.remove('open'); deleteId = null; filterClients(); }
+
+    function toggleMobileMenu() {
+      const sb = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sbBackdrop');
+      sb.classList.toggle('mob-open');
+      backdrop.classList.toggle('show');
+    }
+
+    /* ── Theme ── */
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme_pref', newTheme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun-fill';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Restore theme
+      const t = localStorage.getItem('theme_pref');
+      if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'bi bi-sun-fill';
+      }
+
+      if (localStorage.getItem('sb_col') === '1') {
+        document.getElementById('sidebar').classList.add('col');
+        document.body.classList.add('col-mode');
+      }
+      filterClients();
+    });
+  </script>
+</body>
+
+</html>
