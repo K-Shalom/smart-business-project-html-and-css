@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartBiz â€” Expenses</title>
+  <title>SmartBiz — Expenses</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
     rel="stylesheet" />
   <link
@@ -529,6 +529,8 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .page-head h2 {
@@ -552,7 +554,7 @@
       align-items: start;
     }
 
-    /* â”€â”€ ADD EXPENSE FORM CARD â”€â”€ */
+    /* ── ADD EXPENSE FORM CARD ── */
     .form-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -664,6 +666,8 @@
       color: var(--muted);
       transition: all .15s;
       font-weight: 500;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .cat-label i {
@@ -706,6 +710,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      min-width: 0;
     }
 
     /* stat strip */
@@ -1221,6 +1226,25 @@
       }
     }
 
+    /* Tablet responsiveness */
+    @media(max-width:900px) {
+      .content {
+        padding: 20px 16px;
+      }
+      
+      .form-card {
+        padding: 20px;
+      }
+      
+      .cat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .stat-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media(max-width:768px) {
       .sidebar {
         transform: translateX(-100%);
@@ -1241,8 +1265,20 @@
         margin-left: 0 !important;
       }
 
+      .content {
+        padding: 16px;
+      }
+
       .topbar {
         padding: 0 16px;
+      }
+
+      .topbar h1 {
+        font-size: 18px;
+      }
+
+      .topbar p {
+        display: none;
       }
 
       .hamburger {
@@ -1265,24 +1301,260 @@
         display: block;
       }
 
+      /* ── Layout ── */
+      .exp-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+      }
+
+      /* Form card: remove sticky on mobile */
+      .form-card {
+        position: static;
+      }
+
+      /* Stats strip: single column */
       .stat-strip {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: 1fr !important;
       }
 
-      .filter-bar {
-        flex-direction: column;
-        align-items: stretch !important;
-        gap: 12px !important;
-      }
-
-      .srch-wrap {
-        width: 100% !important;
-      }
-
+      /* Page head */
       .page-head {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
+      }
+
+      .page-head .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Filter bar */
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+
+      .srch-wrap {
+        width: 100% !important;
+        min-width: unset;
+      }
+
+      .fsel {
+        width: 100%;
+      }
+
+      /* Category selector */
+      .cat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      /* Stat cards: smaller values */
+      .ss-val {
+        font-size: 18px;
+      }
+
+      /* Panel head wraps */
+      .panel-head {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      /* Table: horizontal scroll with better mobile handling */
+      .tbl-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0;
+        margin: 0 -12px;
+        padding: 0 12px;
+      }
+
+      table {
+        min-width: 600px;
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+
+      thead th {
+        white-space: nowrap;
+        font-size: 12px;
+        padding: 10px 12px;
+      }
+
+      tbody td {
+        padding: 12px;
+        font-size: 13px;
+      }
+
+      /* Hide less important columns on very small screens */
+      @media(max-width:480px) {
+        table {
+          min-width: 500px;
+        }
+        
+        thead th:nth-child(6),
+        tbody td:nth-child(6) {
+          display: none;
+        }
+      }
+
+      /* Table actions: stack */
+      .td-acts {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .td-acts .btn-icon {
+        padding: 6px 8px;
+        font-size: 13px;
+      }
+
+      /* Modal responsive */
+      .overlay {
+        padding: 12px;
+        align-items: flex-end;
+      }
+
+      .modal {
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 16px 16px 0 0;
+      }
+
+      .modal-body {
+        padding: 16px;
+      }
+
+      /* Modal 2-col form → 1-col */
+      .mrow {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-foot {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 16px;
+      }
+
+      .modal-foot .btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* Category breakdown */
+      .cat-bar-head {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      /* Confirm box responsive */
+      .confirm-box {
+        padding: 20px 16px;
+      }
+
+      .confirm-btns {
+        flex-direction: column;
+      }
+
+      .confirm-btns .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Form improvements for mobile */
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      .form-control {
+        padding: 12px;
+        font-size: 14px;
+        border-radius: var(--r-sm);
+      }
+
+      /* Button improvements */
+      .btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        border-radius: var(--r-sm);
+        min-height: 44px; /* Better touch target */
+      }
+
+      .btn-icon {
+        min-height: 40px;
+        min-width: 40px;
+        padding: 8px;
+      }
+
+      /* Stat cards improvements */
+      .stat-card {
+        padding: 16px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+      }
+
+      /* Better spacing for mobile */
+      .panel {
+        margin-bottom: 20px;
+      }
+
+      .exp-grid {
+        gap: 20px;
+      }
+    }
+
+    /* Extra small screens */
+    @media(max-width:380px) {
+      .content {
+        padding: 12px 8px;
+      }
+      
+      .form-card {
+        padding: 16px;
+      }
+      
+      .topbar {
+        padding: 0 8px;
+      }
+      
+      .topbar h1 {
+        font-size: 16px;
+      }
+      
+      .icon-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+      
+      .stat-card {
+        padding: 12px;
+      }
+      
+      .ss-val {
+        font-size: 18px;
+      }
+      
+      .panel-head {
+        padding: 10px 12px;
+      }
+      
+      .panel-title {
+        font-size: 14px;
       }
     }
 
@@ -1370,7 +1642,7 @@
         </div>
       </div>
       <div class="top-right">
-                <div style="position:relative;">
+        <div style="position:relative;">
           <div class="icon-btn" onclick="toggleNotifs(event)">
             <i class="bi bi-bell"></i>
             <span class="ndot" id="notifDot"></span>
@@ -1465,7 +1737,7 @@
                     class="bi bi-arrow-up"></i>8%</span>
               </div>
               <div class="ss-val">RWF 380,000</div>
-              <div class="ss-lbl">Total â€” Feb 2026</div>
+              <div class="ss-lbl">Total — Feb 2026</div>
             </div>
             <div class="ss ss-a" style="animation-delay:.1s">
               <div class="ss-top">
@@ -1477,7 +1749,7 @@
             </div>
             <div class="ss ss-g" style="animation-delay:.15s">
               <div class="ss-top">
-                <div class="ss-icon si-g"><i class="bi bi-calculator"></i></div><span>â€”</span>
+                <div class="ss-icon si-g"><i class="bi bi-calculator"></i></div><span>—</span>
               </div>
               <div class="ss-val">RWF 27,143</div>
               <div class="ss-lbl">Average per Entry</div>
@@ -1666,7 +1938,7 @@
         return `<div class="cat-item">
         <div class="cat-dot" style="background:${s.bg};color:${s.color};"><i class="bi ${s.icon}"></i></div>
         <div class="cat-bar-wrap">
-          <div class="cat-bar-head"><span class="cat-bar-name">${cat}</span><span class="cat-bar-amt">${fmtRWF(amt)} Â· ${pct}%</span></div>
+          <div class="cat-bar-head"><span class="cat-bar-name">${cat}</span><span class="cat-bar-amt">${fmtRWF(amt)} · ${pct}%</span></div>
           <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${s.color};"></div></div>
         </div>
       </div>`;
