@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SmartBiz — Sign In</title>
+  <title>SmartBiz â€” Sign In</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="css/notifications.css" rel="stylesheet">
   <style>
     :root {
       --sb-bg: #111827;
@@ -33,7 +34,7 @@
       background: var(--bg);
     }
 
-    /* ── LEFT BRANDING PANEL ── */
+    /* â”€â”€ LEFT BRANDING PANEL â”€â”€ */
     .left {
       width: 46%;
       background: var(--sb-bg);
@@ -189,7 +190,7 @@
 
     .feat-text strong { color: #e5e7eb; font-weight: 600; }
 
-    /* ── RIGHT FORM PANEL ── */
+    /* â”€â”€ RIGHT FORM PANEL â”€â”€ */
     .right {
       flex: 1;
       display: flex;
@@ -422,7 +423,7 @@
 </head>
 <body>
 
-  <!-- ── LEFT PANEL ── -->
+  <!-- â”€â”€ LEFT PANEL â”€â”€ -->
   <div class="left">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -438,7 +439,7 @@
         Business Management Platform
       </div>
       <h1>The smarter way to<br/><em>run your business.</em></h1>
-      <p>Track sales, manage stock, monitor expenses and generate financial reports — all in one secure platform built for small enterprises in Rwanda.</p>
+      <p>Track sales, manage stock, monitor expenses and generate financial reports â€” all in one secure platform built for small enterprises in Rwanda.</p>
     </div>
 
     <div class="features">
@@ -452,12 +453,12 @@
       </div>
       <div class="feat">
         <div class="feat-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></div>
-        <span class="feat-text"><strong>Automated reports</strong> — daily, weekly and monthly</span>
+        <span class="feat-text"><strong>Automated reports</strong> â€” daily, weekly and monthly</span>
       </div>
     </div>
   </div>
 
-  <!-- ── RIGHT PANEL ── -->
+  <!-- â”€â”€ RIGHT PANEL â”€â”€ -->
   <div class="right">
     <div class="form-card">
 
@@ -528,10 +529,10 @@
     /*
       Demo credentials for frontend preview.
       In production, Spring Security handles this:
-        POST /login → authenticates via UserDetailsService
-        → redirects to /admin/dashboard OR /cashier/dashboard
+        POST /login â†’ authenticates via UserDetailsService
+        â†’ redirects to /admin/dashboard OR /cashier/dashboard
         based on the user's role stored in the DB.
-      No role selection needed on the form — the server decides.
+      No role selection needed on the form â€” the server decides.
     */
     const USERS = {
       'admin':   { pass: 'admin123',  to: 'admin-dashboard.html' },
@@ -565,5 +566,7 @@
     }
   </script>
 
+  <script src="js/notifications.js"></script>
 </body>
 </html>
+

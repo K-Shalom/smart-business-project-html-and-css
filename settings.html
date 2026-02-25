@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartBiz — Settings</title>
+  <title>SmartBiz â€” Settings</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
     rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
+  <link href="css/notifications.css" rel="stylesheet">
   <style>
     :root {
       --sb-bg: var(--card);
@@ -1026,7 +1027,24 @@
         </div>
       </div>
       <div class="top-right">
-        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+                <div style="position:relative;">
+          <div class="icon-btn" onclick="toggleNotifs(event)">
+            <i class="bi bi-bell"></i>
+            <span class="ndot" id="notifDot"></span>
+          </div>
+          <div class="notif-dropdown" id="notifDrop" onclick="event.stopPropagation()">
+            <div class="notif-head">
+              <h4>Notifications</h4>
+              <span class="badge b-green">4 New</span>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="notif-foot">
+              <a href="#">Clear All Notifications</a>
+            </div>
+          </div>
+        </div>
         <a href="settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
         <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
             id="themeIcon"></i></div>
@@ -1040,7 +1058,7 @@
         <div class="pc-av">SK</div>
         <div class="pc-info">
           <div class="pc-name">Shalom Kubwimbabazi</div>
-          <div class="pc-detail">shalom.k · shalom@smartbiz.rw · 0788000001</div>
+          <div class="pc-detail">shalom.k Â· shalom@smartbiz.rw Â· 0788000001</div>
           <div class="pc-badge"><i class="bi bi-shield-lock-fill"></i> Administrator</div>
         </div>
         <button class="btn btn-ghost" style="color:#9ca3af;border-color:#374151;" onclick="switchTab('profile')"><i
@@ -1135,9 +1153,9 @@
               </div>
               <div class="sf"><label>Currency</label>
                 <select>
-                  <option>RWF — Rwandan Franc</option>
-                  <option>USD — US Dollar</option>
-                  <option>EUR — Euro</option>
+                  <option>RWF â€” Rwandan Franc</option>
+                  <option>USD â€” US Dollar</option>
+                  <option>EUR â€” Euro</option>
                 </select>
               </div>
             </div>
@@ -1181,8 +1199,8 @@
                       <i class="bi bi-laptop"></i>
                     </div>
                     <div>
-                      <div style="font-size:13.5px;font-weight:600;">This device · Chrome on Windows</div>
-                      <div style="font-size:12px;color:var(--muted);">Karongi, Rwanda · Active now</div>
+                      <div style="font-size:13.5px;font-weight:600;">This device Â· Chrome on Windows</div>
+                      <div style="font-size:12px;color:var(--muted);">Karongi, Rwanda Â· Active now</div>
                     </div>
                   </div>
                   <span
@@ -1346,7 +1364,7 @@
                   class="bi bi-exclamation-triangle-fill"></i></div>
               <div>
                 <h3>Danger Zone</h3>
-                <p>Irreversible actions — proceed with caution</p>
+                <p>Irreversible actions â€” proceed with caution</p>
               </div>
             </div>
             <div class="sp-body" style="padding:0;">
@@ -1358,7 +1376,7 @@
                     <div class="dz-item-desc">Permanently delete all sales records. This cannot be undone.</div>
                   </div>
                   <button class="btn btn-danger btn-sm"
-                    onclick="if(confirm('Are you sure? This cannot be undone.'))showToast('Action cancelled — demo only.')"><i
+                    onclick="if(confirm('Are you sure? This cannot be undone.'))showToast('Action cancelled â€” demo only.')"><i
                       class="bi bi-trash3"></i> Reset</button>
                 </div>
                 <div class="dz-item">
@@ -1375,7 +1393,7 @@
                     <div class="dz-item-desc">Permanently remove this account and all associated data.</div>
                   </div>
                   <button class="btn btn-danger btn-sm"
-                    onclick="if(confirm('This will permanently delete everything. Are you absolutely sure?'))alert('Protected — demo only.')"><i
+                    onclick="if(confirm('This will permanently delete everything. Are you absolutely sure?'))alert('Protected â€” demo only.')"><i
                       class="bi bi-person-dash"></i> Delete</button>
                 </div>
               </div>
@@ -1452,6 +1470,7 @@
       }
     });
   </script>
+  <script src="js/notifications.js"></script>
 </body>
 
 </html>

@@ -10,6 +10,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
+  <link rel="stylesheet" href="css/notifications.css">
   <style>
     :root {
       --sb-bg: var(--card);
@@ -528,6 +529,8 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .page-head h2 {
@@ -663,6 +666,8 @@
       color: var(--muted);
       transition: all .15s;
       font-weight: 500;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .cat-label i {
@@ -705,6 +710,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      min-width: 0;
     }
 
     /* stat strip */
@@ -1276,20 +1282,23 @@
         display: block;
       }
 
+      /* ── Layout ── */
+      .exp-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+      }
+
+      /* Form card: remove sticky on mobile */
+      .form-card {
+        position: static;
+      }
+
+      /* Stats strip: single column */
       .stat-strip {
         grid-template-columns: 1fr !important;
       }
 
-      .filter-bar {
-        flex-direction: column;
-        align-items: stretch !important;
-        gap: 12px !important;
-      }
-
-      .srch-wrap {
-        width: 100% !important;
-      }
-
+      /* Page head */
       .page-head {
         flex-direction: column;
         align-items: flex-start;
@@ -1301,8 +1310,100 @@
         justify-content: center;
       }
 
+      /* Filter bar */
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+
+      .srch-wrap {
+        width: 100% !important;
+        min-width: unset;
+      }
+
+      .fsel {
+        width: 100%;
+      }
+
+      /* Category selector */
       .cat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      /* Stat cards: smaller values */
+      .ss-val {
+        font-size: 18px;
+      }
+
+      /* Panel head wraps */
+      .panel-head {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      /* Table: horizontal scroll */
+      .tbl-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Table actions: stack */
+      .td-acts {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      /* Modal responsive */
+      .overlay {
+        padding: 12px;
+        align-items: flex-end;
+      }
+
+      .modal {
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 16px 16px 0 0;
+      }
+
+      .modal-body {
+        padding: 16px;
+      }
+
+      /* Modal 2-col form → 1-col */
+      .mrow {
         grid-template-columns: 1fr;
+      }
+
+      .modal-foot {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 16px;
+      }
+
+      .modal-foot .btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* Category breakdown */
+      .cat-bar-head {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      /* Confirm box responsive */
+      .confirm-box {
+        padding: 20px 16px;
+      }
+
+      .confirm-btns {
+        flex-direction: column;
+      }
+
+      .confirm-btns .btn {
+        width: 100%;
+        justify-content: center;
       }
     }
 
@@ -1385,7 +1486,24 @@
         </div>
       </div>
       <div class="top-right">
-        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+        <div style="position:relative;">
+          <div class="icon-btn" onclick="toggleNotifs(event)">
+            <i class="bi bi-bell"></i>
+            <span class="ndot" id="notifDot"></span>
+          </div>
+          <div class="notif-dropdown" id="notifDrop" onclick="event.stopPropagation()">
+            <div class="notif-head">
+              <h4>Notifications</h4>
+              <span class="badge b-green">4 New</span>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="notif-foot">
+              <a href="#">Clear All Notifications</a>
+            </div>
+          </div>
+        </div>
         <a href="settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
         <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
             id="themeIcon"></i></div>
@@ -1580,6 +1698,7 @@
     </div>
   </div>
 
+  <script src="js/notifications.js"></script>
   <script>
     function toggleTheme() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';

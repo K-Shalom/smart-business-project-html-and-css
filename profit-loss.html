@@ -7,9 +7,8 @@
   <title>SmartBiz — Profit & Loss</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
     rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
-    rel="stylesheet" />
+  <link rel="stylesheet" />
+  <link rel="stylesheet" href="css/notifications.css">
   <style>
     :root {
       --sb-bg: var(--card);
@@ -544,8 +543,8 @@
     }
 
     .ptab.active {
-      background: var(--sb-bg);
-      color: #fff;
+      background: var(--text);
+      color: var(--bg);
     }
 
     /* KPI cards */
@@ -935,8 +934,20 @@
         margin-left: 0 !important;
       }
 
+      .content {
+        padding: 16px;
+      }
+
       .topbar {
         padding: 0 16px;
+      }
+
+      .topbar h1 {
+        font-size: 18px;
+      }
+
+      .topbar p {
+        display: none;
       }
 
       .hamburger {
@@ -969,8 +980,62 @@
         gap: 12px;
       }
 
+      .page-head>div:nth-child(2) {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100%;
+        gap: 10px !important;
+      }
+
+      .page-head .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .period-tabs {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .period-tabs .ptab {
+        flex: 1;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 12px;
+      }
+
       .chart-grid {
         grid-template-columns: 1fr;
+      }
+
+      .bar-chart {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .chart-wrap {
+        min-width: 380px;
+      }
+
+      .chart-legend {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .stmt-row {
+        gap: 8px;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+      }
+
+      .stmt-val {
+        font-size: 13.5px;
+        width: auto;
+      }
+
+      .kpi-val {
+        font-size: 24px;
       }
     }
 
@@ -1053,7 +1118,24 @@
         </div>
       </div>
       <div class="top-right">
-        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+        <div style="position:relative;">
+          <div class="icon-btn" onclick="toggleNotifs(event)">
+            <i class="bi bi-bell"></i>
+            <span class="ndot" id="notifDot"></span>
+          </div>
+          <div class="notif-dropdown" id="notifDrop" onclick="event.stopPropagation()">
+            <div class="notif-head">
+              <h4>Notifications</h4>
+              <span class="badge b-green">4 New</span>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="notif-foot">
+              <a href="#">Clear All Notifications</a>
+            </div>
+          </div>
+        </div>
         <a href="settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
         <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
             id="themeIcon"></i></div>
@@ -1221,6 +1303,7 @@
     </div>
   </div>
 
+  <script src="js/notifications.js"></script>
   <script>
     function toggleTheme() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';

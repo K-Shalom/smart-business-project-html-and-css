@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartBiz — Sales</title>
+  <title>SmartBiz â€” Sales</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
     rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
+  <link href="css/notifications.css" rel="stylesheet">
   <style>
     :root {
       --sb-bg: var(--card);
@@ -76,7 +77,7 @@
       overflow-x: hidden;
     }
 
-    /* ── SIDEBAR ── */
+    /* â”€â”€ SIDEBAR â”€â”€ */
     .sidebar {
       width: var(--sb-w);
       height: 100vh;
@@ -386,7 +387,7 @@
       opacity: 0;
     }
 
-    /* ── MAIN ── */
+    /* â”€â”€ MAIN â”€â”€ */
     .main {
       margin-left: var(--sb-w);
       flex: 1;
@@ -400,7 +401,7 @@
       margin-left: var(--sb-w-col);
     }
 
-    /* ── TOPBAR ── */
+    /* â”€â”€ TOPBAR â”€â”€ */
     .topbar {
       height: 64px;
       background: var(--card);
@@ -465,13 +466,13 @@
       border: 1.5px solid var(--card);
     }
 
-    /* ── CONTENT ── */
+    /* â”€â”€ CONTENT â”€â”€ */
     .content {
       flex: 1;
       padding: 24px 28px;
     }
 
-    /* ── BUTTONS ── */
+    /* â”€â”€ BUTTONS â”€â”€ */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -539,7 +540,7 @@
       color: #fff;
     }
 
-    /* ── PAGE HEAD ── */
+    /* â”€â”€ PAGE HEAD â”€â”€ */
     .page-head {
       display: flex;
       justify-content: space-between;
@@ -560,7 +561,7 @@
       margin-top: 2px;
     }
 
-    /* ── STAT STRIP ── */
+    /* â”€â”€ STAT STRIP â”€â”€ */
     .stat-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -680,7 +681,7 @@
       color: var(--muted);
     }
 
-    /* ── FILTER BAR ── */
+    /* â”€â”€ FILTER BAR â”€â”€ */
     .filter-bar {
       display: flex;
       gap: 10px;
@@ -765,7 +766,7 @@
       font-size: 12px;
     }
 
-    /* ── TABLE PANEL ── */
+    /* â”€â”€ TABLE PANEL â”€â”€ */
     .panel {
       background: var(--card);
       border: 1px solid var(--border);
@@ -975,7 +976,7 @@
       cursor: not-allowed;
     }
 
-    /* ── INVOICE MODAL ── */
+    /* â”€â”€ INVOICE MODAL â”€â”€ */
     .overlay {
       position: fixed;
       inset: 0;
@@ -1357,7 +1358,7 @@
 
 <body>
 
-  <!-- ══ SIDEBAR ══ -->
+  <!-- â•â• SIDEBAR â•â• -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
       <div class="logo-mark">SB</div>
@@ -1408,7 +1409,7 @@
     </div>
   </aside>
 
-  <!-- ══ MAIN ══ -->
+  <!-- â•â• MAIN â•â• -->
   <div class="sb-backdrop" id="sbBackdrop" onclick="toggleMobileMenu()"></div>
   <div class="main">
     <div class="topbar">
@@ -1422,7 +1423,24 @@
         <p>Monitor and manage all transactions</p>
       </div>
       <div class="top-right">
-        <div class="icon-btn" style="position:relative;"><i class="bi bi-bell"></i><span class="ndot"></span></div>
+                <div style="position:relative;">
+          <div class="icon-btn" onclick="toggleNotifs(event)">
+            <i class="bi bi-bell"></i>
+            <span class="ndot" id="notifDot"></span>
+          </div>
+          <div class="notif-dropdown" id="notifDrop" onclick="event.stopPropagation()">
+            <div class="notif-head">
+              <h4>Notifications</h4>
+              <span class="badge b-green">4 New</span>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="notif-foot">
+              <a href="#">Clear All Notifications</a>
+            </div>
+          </div>
+        </div>
         <a href="cashier-settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
         <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
             id="themeIcon"></i></div>
@@ -1451,7 +1469,7 @@
                 class="bi bi-arrow-up"></i>14%</span>
           </div>
           <div class="ss-val">RWF 1,240,500</div>
-          <div class="ss-lbl">Total Sales — Feb 2026</div>
+          <div class="ss-lbl">Total Sales â€” Feb 2026</div>
         </div>
         <div class="ss ss-b" style="animation-delay:.08s">
           <div class="ss-top">
@@ -1497,7 +1515,7 @@
         <div class="date-range">
           <i class="bi bi-calendar3" style="color:var(--muted);font-size:13px;"></i>
           <input type="date" value="2026-02-01" />
-          <span>→</span>
+          <span>â†’</span>
           <input type="date" value="2026-02-23" />
         </div>
       </div>
@@ -1528,7 +1546,7 @@
           </table>
         </div>
         <div class="pager">
-          <span class="pager-info" id="pagerInfo">Showing 1–10 of 10 records</span>
+          <span class="pager-info" id="pagerInfo">Showing 1â€“10 of 10 records</span>
           <div class="pager-btns">
             <button class="pg" disabled><i class="bi bi-chevron-left"></i></button>
             <button class="pg active">1</button>
@@ -1541,7 +1559,7 @@
     </div>
   </div>
 
-  <!-- ══ INVOICE MODAL ══ -->
+  <!-- â•â• INVOICE MODAL â•â• -->
   <div class="overlay" id="invoiceModal">
     <div class="modal">
       <div class="modal-head">
@@ -1557,7 +1575,7 @@
     </div>
   </div>
 
-  <!-- ══ DELETE CONFIRM ══ -->
+  <!-- â•â• DELETE CONFIRM â•â• -->
   <div class="confirm-overlay" id="confirmDel">
     <div class="confirm-box">
       <div class="confirm-icon"><i class="bi bi-trash3-fill"></i></div>
@@ -1587,7 +1605,7 @@
         if (icon) icon.className = 'bi bi-sun-fill';
       }
     });
-    /* ── DATA ── */
+    /* â”€â”€ DATA â”€â”€ */
     let sales = [
       { id: 1, inv: 'INV-0041', client: 'Jean Bosco', phone: '0788001001', amount: 45000, disc: 0, final: 45000, method: 'MOMO', date: '2026-02-23', status: 'Paid', cashier: 'Alice M.', items: [{ name: 'Mouse Wireless', qty: 1, price: 12000 }, { name: 'USB Cable', qty: 3, price: 3500 }, { name: 'Keyboard USB', qty: 1, price: 8000 }] },
       { id: 2, inv: 'INV-0040', client: 'Amina Uwera', phone: '0788002002', amount: 120000, disc: 5000, final: 115000, method: 'CASH', date: '2026-02-23', status: 'Paid', cashier: 'Shalom K.', items: [{ name: 'Laptop HP 15', qty: 1, price: 450000 }, { name: 'Laptop Stand', qty: 1, price: 9500 }] },
@@ -1633,7 +1651,7 @@
           </div>
         </td>
         <td style="color:var(--muted);">${fmtRWF(s.amount)}</td>
-        <td style="color:var(--red);font-size:12.5px;">${s.disc > 0 ? '-' + fmtRWF(s.disc) : '—'}</td>
+        <td style="color:var(--red);font-size:12.5px;">${s.disc > 0 ? '-' + fmtRWF(s.disc) : 'â€”'}</td>
         <td style="font-weight:700;color:var(--green);">${fmtRWF(s.final)}</td>
         <td>${methodBadge(s.method)}</td>
         <td style="font-size:12.5px;color:var(--muted);">${s.date}</td>
@@ -1645,7 +1663,7 @@
         </div></td>
       </tr>`).join('');
       document.getElementById('rowCount').textContent = `Showing ${data.length} record${data.length !== 1 ? 's' : ''}`;
-      document.getElementById('pagerInfo').textContent = `Showing 1–${data.length} of ${data.length} records`;
+      document.getElementById('pagerInfo').textContent = `Showing 1â€“${data.length} of ${data.length} records`;
     }
 
     function filterSales() {
@@ -1659,7 +1677,7 @@
       ));
     }
 
-    /* ── Invoice modal ── */
+    /* â”€â”€ Invoice modal â”€â”€ */
     function viewInvoice(id) {
       const s = sales.find(x => x.id === id);
       document.getElementById('invModalTitle').textContent = `Invoice #${s.inv}`;
@@ -1714,7 +1732,7 @@
 
     function closeInvoice() { document.getElementById('invoiceModal').classList.remove('open'); }
 
-    /* ── Delete ── */
+    /* â”€â”€ Delete â”€â”€ */
     function openConfirm(id) {
       deleteId = id;
       document.getElementById('delInvNo').textContent = '#' + sales.find(x => x.id === id).inv;
@@ -1748,6 +1766,7 @@
       renderSales(sales);
     });
   </script>
+  <script src="js/notifications.js"></script>
 </body>
 
 </html>

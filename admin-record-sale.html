@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SmartBiz — Record Sale (Admin)</title>
+    <title>SmartBiz â€” Record Sale (Admin)</title>
     <link rel="stylesheet" href="css/notifications.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
         rel="stylesheet" />
@@ -830,15 +830,15 @@
                             <select onchange="calcTotal()">
                                 <option value="">Select item...</option>
                                 <optgroup label="Products">
-                                    <option>Laptop HP 15 — RWF 450,000</option>
-                                    <option>USB Cable — RWF 3,500</option>
-                                    <option>Mouse Wireless — RWF 12,000</option>
-                                    <option>Keyboard — RWF 8,000</option>
+                                    <option>Laptop HP 15 â€” RWF 450,000</option>
+                                    <option>USB Cable â€” RWF 3,500</option>
+                                    <option>Mouse Wireless â€” RWF 12,000</option>
+                                    <option>Keyboard â€” RWF 8,000</option>
                                 </optgroup>
                                 <optgroup label="Services">
-                                    <option>Laptop Repair — RWF 15,000</option>
-                                    <option>Network Setup — RWF 25,000</option>
-                                    <option>IT Consultation — RWF 10,000</option>
+                                    <option>Laptop Repair â€” RWF 15,000</option>
+                                    <option>Network Setup â€” RWF 25,000</option>
+                                    <option>IT Consultation â€” RWF 10,000</option>
                                 </optgroup>
                             </select>
                             <input type="number" value="1" min="1" onchange="calcTotal()" />
@@ -881,13 +881,13 @@
 
     <script>
         const prices = {
-            'Laptop HP 15 — RWF 450,000': 450000,
-            'USB Cable — RWF 3,500': 3500,
-            'Mouse Wireless — RWF 12,000': 12000,
-            'Keyboard — RWF 8,000': 8000,
-            'Laptop Repair — RWF 15,000': 15000,
-            'Network Setup — RWF 25,000': 25000,
-            'IT Consultation — RWF 10,000': 10000
+            'Laptop HP 15 â€” RWF 450,000': 450000,
+            'USB Cable â€” RWF 3,500': 3500,
+            'Mouse Wireless â€” RWF 12,000': 12000,
+            'Keyboard â€” RWF 8,000': 8000,
+            'Laptop Repair â€” RWF 15,000': 15000,
+            'Network Setup â€” RWF 25,000': 25000,
+            'IT Consultation â€” RWF 10,000': 10000
         };
 
         function handleClientChange(sel) {
@@ -942,15 +942,15 @@
       <select onchange="calcTotal()">
         <option value="">Select item...</option>
         <optgroup label="Products">
-          <option>Laptop HP 15 — RWF 450,000</option>
-          <option>USB Cable — RWF 3,500</option>
-          <option>Mouse Wireless — RWF 12,000</option>
-          <option>Keyboard — RWF 8,000</option>
+          <option>Laptop HP 15 â€” RWF 450,000</option>
+          <option>USB Cable â€” RWF 3,500</option>
+          <option>Mouse Wireless â€” RWF 12,000</option>
+          <option>Keyboard â€” RWF 8,000</option>
         </optgroup>
         <optgroup label="Services">
-          <option>Laptop Repair — RWF 15,000</option>
-          <option>Network Setup — RWF 25,000</option>
-          <option>IT Consultation — RWF 10,000</option>
+          <option>Laptop Repair â€” RWF 15,000</option>
+          <option>Network Setup â€” RWF 25,000</option>
+          <option>IT Consultation â€” RWF 10,000</option>
         </optgroup>
       </select>
       <input type="number" value="1" min="1" onchange="calcTotal()"/>
@@ -973,7 +973,7 @@
         function submitSale() {
             const client = document.getElementById('clientSelect').value;
             if (!client || client === 'NEW') { alert('Please select a client.'); return; }
-            alert('✅ Sale recorded successfully by Admin!');
+            alert('âœ… Sale recorded successfully by Admin!');
             window.location.href = 'sales.html';
         }
 
@@ -1013,6 +1013,7 @@
             backdrop.classList.toggle('show');
         }
     </script>
+  <script src="js/notifications.js"></script>
 </body>
 
 </html>

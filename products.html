@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartBiz — Products</title>
+  <title>SmartBiz â€” Products</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
     rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
+  <link href="css/notifications.css" rel="stylesheet">
   <style>
     :root {
       --sb-bg: var(--card);
@@ -74,7 +75,7 @@
       overflow-x: hidden;
     }
 
-    /* ── SIDEBAR (reused) ── */
+    /* â”€â”€ SIDEBAR (reused) â”€â”€ */
     .sidebar {
       width: var(--sb-w);
       height: 100vh;
@@ -384,7 +385,7 @@
       opacity: 0;
     }
 
-    /* ── MAIN ── */
+    /* â”€â”€ MAIN â”€â”€ */
     .main {
       margin-left: var(--sb-w);
       flex: 1;
@@ -455,7 +456,7 @@
       padding: 24px 28px;
     }
 
-    /* ── BUTTONS ── */
+    /* â”€â”€ BUTTONS â”€â”€ */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -523,7 +524,7 @@
       color: #fff;
     }
 
-    /* ── PAGE HEAD ── */
+    /* â”€â”€ PAGE HEAD â”€â”€ */
     .page-head {
       display: flex;
       justify-content: space-between;
@@ -550,7 +551,7 @@
       align-items: center;
     }
 
-    /* ── FILTER BAR ── */
+    /* â”€â”€ FILTER BAR â”€â”€ */
     .filter-bar {
       display: flex;
       gap: 10px;
@@ -609,7 +610,7 @@
       border-color: var(--green);
     }
 
-    /* ── STAT STRIP ── */
+    /* â”€â”€ STAT STRIP â”€â”€ */
     .stat-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -671,7 +672,7 @@
       color: var(--muted);
     }
 
-    /* ── TABLE PANEL ── */
+    /* â”€â”€ TABLE PANEL â”€â”€ */
     .panel {
       background: var(--card);
       border: 1px solid var(--border);
@@ -854,7 +855,7 @@
       cursor: not-allowed;
     }
 
-    /* ── MODAL ── */
+    /* â”€â”€ MODAL â”€â”€ */
     .overlay {
       position: fixed;
       inset: 0;
@@ -1167,7 +1168,7 @@
 
 <body>
 
-  <!-- ══ SIDEBAR ══ -->
+  <!-- â•â• SIDEBAR â•â• -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
       <div class="logo-mark">SB</div>
@@ -1213,7 +1214,7 @@
     </div>
   </aside>
 
-  <!-- ══ MAIN ══ -->
+  <!-- â•â• MAIN â•â• -->
   <div class="sb-backdrop" id="sbBackdrop" onclick="toggleMobileMenu()"></div>
   <div class="main" id="mainWrap">
     <div class="topbar">
@@ -1227,7 +1228,24 @@
         </div>
       </div>
       <div class="top-right">
-        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+                <div style="position:relative;">
+          <div class="icon-btn" onclick="toggleNotifs(event)">
+            <i class="bi bi-bell"></i>
+            <span class="ndot" id="notifDot"></span>
+          </div>
+          <div class="notif-dropdown" id="notifDrop" onclick="event.stopPropagation()">
+            <div class="notif-head">
+              <h4>Notifications</h4>
+              <span class="badge b-green">4 New</span>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="notif-foot">
+              <a href="#">Clear All Notifications</a>
+            </div>
+          </div>
+        </div>
         <a href="settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
         <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
             id="themeIcon"></i></div>
@@ -1240,7 +1258,7 @@
       <div class="page-head">
         <div>
           <h2>Product Inventory</h2>
-          <p>12 products registered · Last updated today</p>
+          <p>12 products registered Â· Last updated today</p>
         </div>
         <div class="head-actions">
           <button class="btn btn-ghost"><i class="bi bi-download"></i> Export CSV</button>
@@ -1327,7 +1345,7 @@
           </table>
         </div>
         <div class="pager">
-          <span class="pager-info">Showing 1–12 of 12 products</span>
+          <span class="pager-info">Showing 1â€“12 of 12 products</span>
           <div class="pager-btns">
             <button class="pg-btn" disabled><i class="bi bi-chevron-left"></i></button>
             <button class="pg-btn active">1</button>
@@ -1340,7 +1358,7 @@
     </div>
   </div>
 
-  <!-- ══ ADD / EDIT MODAL ══ -->
+  <!-- â•â• ADD / EDIT MODAL â•â• -->
   <div class="overlay" id="productModal">
     <div class="modal">
       <div class="modal-head">
@@ -1384,7 +1402,7 @@
     </div>
   </div>
 
-  <!-- ══ DELETE CONFIRM ══ -->
+  <!-- â•â• DELETE CONFIRM â•â• -->
   <div class="confirm-overlay" id="confirmModal">
     <div class="confirm-box">
       <div class="confirm-icon"><i class="bi bi-trash3-fill"></i></div>
@@ -1415,7 +1433,7 @@
         if (icon) icon.className = 'bi bi-sun-fill';
       }
     });
-    /* ── Data ── */
+    /* â”€â”€ Data â”€â”€ */
     let products = [
       { id: 1, name: 'Laptop HP 15', desc: 'Intel Core i5, 8GB RAM, 256GB SSD', price: 450000, qty: 8, cat: 'Electronics', by: 'Shalom K.' },
       { id: 2, name: 'USB Cable Type-C', desc: '2m braided fast charge cable', price: 3500, qty: 34, cat: 'Accessories', by: 'Shalom K.' },
@@ -1485,7 +1503,7 @@
       renderTable(filtered);
     }
 
-    /* ── Modal ── */
+    /* â”€â”€ Modal â”€â”€ */
     function openModal(id = null) {
       editId = id;
       document.getElementById('modalTitle').textContent = id ? 'Edit Product' : 'Add New Product';
@@ -1519,7 +1537,7 @@
       closeModal(); filterTable();
     }
 
-    /* ── Delete ── */
+    /* â”€â”€ Delete â”€â”€ */
     function openConfirm(id, name) {
       deleteId = id;
       document.getElementById('deleteName').textContent = name;
@@ -1533,7 +1551,7 @@
 
     function editProduct(id) { openModal(id); }
 
-    /* ── Sidebar ── */
+    /* â”€â”€ Sidebar â”€â”€ */
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('col');
       document.body.classList.toggle('col-mode');
@@ -1567,6 +1585,7 @@
     document.getElementById('productModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
     document.getElementById('confirmModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeConfirm(); });
   </script>
+  <script src="js/notifications.js"></script>
 </body>
 
 </html>

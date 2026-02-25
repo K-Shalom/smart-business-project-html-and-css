@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartBiz — Expenses</title>
+  <title>SmartBiz â€” Expenses</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
     rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
+  <link href="css/notifications.css" rel="stylesheet">
   <style>
     :root {
       --sb-bg: var(--card);
@@ -551,7 +552,7 @@
       align-items: start;
     }
 
-    /* ── ADD EXPENSE FORM CARD ── */
+    /* â”€â”€ ADD EXPENSE FORM CARD â”€â”€ */
     .form-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -1304,7 +1305,7 @@
 
 <body>
 
-  <!-- ══ SIDEBAR ══ -->
+  <!-- â•â• SIDEBAR â•â• -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
       <div class="logo-mark">SB</div>
@@ -1355,7 +1356,7 @@
     </div>
   </aside>
 
-  <!-- ══ MAIN ══ -->
+  <!-- â•â• MAIN â•â• -->
   <div class="sb-backdrop" id="sbBackdrop" onclick="toggleMobileMenu()"></div>
   <div class="main" id="mainWrap">
     <div class="topbar">
@@ -1369,7 +1370,24 @@
         </div>
       </div>
       <div class="top-right">
-        <div class="icon-btn"><i class="bi bi-bell"></i></div>
+                <div style="position:relative;">
+          <div class="icon-btn" onclick="toggleNotifs(event)">
+            <i class="bi bi-bell"></i>
+            <span class="ndot" id="notifDot"></span>
+          </div>
+          <div class="notif-dropdown" id="notifDrop" onclick="event.stopPropagation()">
+            <div class="notif-head">
+              <h4>Notifications</h4>
+              <span class="badge b-green">4 New</span>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="notif-foot">
+              <a href="#">Clear All Notifications</a>
+            </div>
+          </div>
+        </div>
         <a href="cashier-settings.html" class="icon-btn" title="Settings"><i class="bi bi-gear"></i></a>
         <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="bi bi-moon-stars"
             id="themeIcon"></i></div>
@@ -1387,7 +1405,7 @@
 
       <div class="exp-grid">
 
-        <!-- ── LEFT: Add Form ── -->
+        <!-- â”€â”€ LEFT: Add Form â”€â”€ -->
         <div class="form-card">
           <div class="form-card-head">
             <h3><i class="bi bi-plus-circle-fill" style="color:var(--red);margin-right:6px;"></i>Record Expense</h3>
@@ -1436,7 +1454,7 @@
           </div>
         </div>
 
-        <!-- ── RIGHT: Stats + Table ── -->
+        <!-- â”€â”€ RIGHT: Stats + Table â”€â”€ -->
         <div class="right-col">
 
           <!-- Stats -->
@@ -1447,7 +1465,7 @@
                     class="bi bi-arrow-up"></i>8%</span>
               </div>
               <div class="ss-val">RWF 380,000</div>
-              <div class="ss-lbl">Total — Feb 2026</div>
+              <div class="ss-lbl">Total â€” Feb 2026</div>
             </div>
             <div class="ss ss-a" style="animation-delay:.1s">
               <div class="ss-top">
@@ -1459,7 +1477,7 @@
             </div>
             <div class="ss ss-g" style="animation-delay:.15s">
               <div class="ss-top">
-                <div class="ss-icon si-g"><i class="bi bi-calculator"></i></div><span>—</span>
+                <div class="ss-icon si-g"><i class="bi bi-calculator"></i></div><span>â€”</span>
               </div>
               <div class="ss-val">RWF 27,143</div>
               <div class="ss-lbl">Average per Entry</div>
@@ -1648,7 +1666,7 @@
         return `<div class="cat-item">
         <div class="cat-dot" style="background:${s.bg};color:${s.color};"><i class="bi ${s.icon}"></i></div>
         <div class="cat-bar-wrap">
-          <div class="cat-bar-head"><span class="cat-bar-name">${cat}</span><span class="cat-bar-amt">${fmtRWF(amt)} · ${pct}%</span></div>
+          <div class="cat-bar-head"><span class="cat-bar-name">${cat}</span><span class="cat-bar-amt">${fmtRWF(amt)} Â· ${pct}%</span></div>
           <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${s.color};"></div></div>
         </div>
       </div>`;
@@ -1733,6 +1751,7 @@
       renderCatBreakdown();
     });
   </script>
+  <script src="js/notifications.js"></script>
 </body>
 
 </html>
