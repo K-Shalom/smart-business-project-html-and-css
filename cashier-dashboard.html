@@ -21,41 +21,41 @@
       --sb-hover: var(--subtle);
       --sb-w: 240px;
       --sb-w-col: 64px;
-      --bg: #0f172a;
-      --card: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --subtle: #273548;
-      --blue: #3b82f6;
-      --blue-d: #1d4ed8;
-      --blue-l: rgba(59, 130, 246, 0.15);
-      --green: #10b981;
-      --green-d: #059669;
-      --green-l: rgba(16, 185, 129, 0.15);
-      --red: #ef4444;
-      --red-l: rgba(239, 68, 68, 0.15);
-      --amber: #f59e0b;
-      --amber-l: rgba(245, 158, 11, 0.15);
-      --r: 12px;
-      --r-sm: 8px;
-      --shadow: 0 1px 3px rgba(0, 0, 0, .5);
-      --shadow-md: 0 4px 24px rgba(0, 0, 0, .7);
-    }
-
-    [data-theme="light"] {
       --bg: #f8fafc;
       --card: #ffffff;
       --border: #e2e8f0;
       --text: #0f172a;
       --muted: #64748b;
       --subtle: #f1f5f9;
+      --blue: #3b82f6;
+      --blue-d: #1d4ed8;
       --blue-l: #dbeafe;
+      --green: #10b981;
+      --green-d: #059669;
       --green-l: #d1fae5;
+      --red: #ef4444;
       --red-l: #fee2e2;
+      --amber: #f59e0b;
       --amber-l: #fef3c7;
-      --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --r: 12px;
+      --r-sm: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --subtle: #273548;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .5);
+      --shadow-md: 0 4px 24px rgba(0, 0, 0, .7);
+      --blue-l: rgba(59, 130, 246, 0.15);
+      --green-l: rgba(16, 185, 129, 0.15);
+      --red-l: rgba(239, 68, 68, 0.15);
+      --amber-l: rgba(245, 158, 11, 0.15);
     }
 
     *,
@@ -688,7 +688,7 @@
   </style>
 </head>
 
-<body data-theme="dark">
+<body>
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
       <div class="logo-mark">SB</div>
@@ -882,23 +882,32 @@
   <script src="js/notifications.js"></script>
   <script>
     function toggleTheme() {
-      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       const newTheme = isDark ? 'light' : 'dark';
-      document.body.setAttribute('data-theme', newTheme);
+      document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme_pref', newTheme);
-      document.getElementById('themeIcon').className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun-fill';
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun-fill';
     }
 
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('col');
       document.body.classList.toggle('col-mode');
+      localStorage.setItem('sb_col', document.getElementById('sidebar').classList.contains('col') ? '1' : '0');
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       const t = localStorage.getItem('theme_pref');
-      if (t === 'light') {
-        document.body.setAttribute('data-theme', 'light');
-        document.getElementById('themeIcon').className = 'bi bi-moon-stars';
+      if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'bi bi-sun-fill';
+      }
+
+      // Restore sidebar
+      if (localStorage.getItem('sb_col') === '1') {
+        document.getElementById('sidebar').classList.add('col');
+        document.body.classList.add('col-mode');
       }
     });
 
